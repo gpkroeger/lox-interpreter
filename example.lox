@@ -1,0 +1,5 @@
+print("Hello World")
+x = 4
+x = x +6
+g = 2+ 8
+str = "this is a " + "string"
