@@ -1,6 +1,5 @@
 
-
-class token:
+class Token:
     def __init__(self, tokType, lexeme, literal, lineNum):
         self.tokType = tokType
         self.lexeme = lexeme
@@ -8,4 +7,4 @@ class token:
         self.lineNum = lineNum
     
     def __str__(self):
-        return f'{self.token_type} {self.lexeme} {self.literal}'
+        return f'{self.tokType} {self.lexeme} {self.literal}'

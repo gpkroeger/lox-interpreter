@@ -49,3 +49,22 @@ class tokenTypes(Enum):
 
     #EOF
     EOF = auto()
+
+keywords = {
+    "and":tokenTypes.AND,
+    "class":tokenTypes.CLASS,
+    "else":tokenTypes.ELSE,
+    "false":tokenTypes.FALSE,
+    "fun":tokenTypes.FUN,
+    "for":tokenTypes.FOR,
+    "if":tokenTypes.IF,
+    "nil":tokenTypes.NIL,
+    "or":tokenTypes.OR,
+    "print":tokenTypes.PRINT,
+    "return":tokenTypes.RETURN,
+    "super":tokenTypes.SUPER,
+    "this":tokenTypes.THIS,
+    "tru":tokenTypes.TRUE,
+    "var":tokenTypes.VAR,
+    "while":tokenTypes.WHILE
+}
