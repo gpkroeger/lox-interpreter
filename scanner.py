@@ -35,13 +35,13 @@ class scanner:
         elif c == ';': self.addToken(tokenTypes.SEMICOLON)
         elif c == '*': self.addToken(tokenTypes.STAR)
         #ambigous char tokens
-        elif c == '!': self.addToken(tokenTypes.BANG_EQUAL if match('=') else tokenTypes.BANG)
-        elif c == '=': self.addToken(tokenTypes.EQUAL_EQUAL if match('=') else tokenTypes.EQUAL)
-        elif c == '<': self.addToken(tokenTypes.LESS_EQUAL if match('=') else tokenTypes.LESS)
-        elif c == '>': self.addToken(tokenTypes.GREATER_EQUAL if match('=') else tokenTypes.GREATER)
+        elif c == '!': self.addToken(tokenTypes.BANG_EQUAL if self.match('=') else tokenTypes.BANG)
+        elif c == '=': self.addToken(tokenTypes.EQUAL_EQUAL if self.match('=') else tokenTypes.EQUAL)
+        elif c == '<': self.addToken(tokenTypes.LESS_EQUAL if self.match('=') else tokenTypes.LESS)
+        elif c == '>': self.addToken(tokenTypes.GREATER_EQUAL if self.match('=') else tokenTypes.GREATER)
         #distinguishes between comments and SLASH
         elif c == '/':
-            if self.match('/'):
+            if self.self.match('/'):
                 while self.peek() != '\n' and not self.atEnd(): self.advance()
             else: self.addToken(tokenTypes.SLASH)
         #skip all whitespace
@@ -65,7 +65,7 @@ class scanner:
 
     def match(self, expected):
         if self.atEnd(): return False
-        if self.text[current] != expected: return False
+        if self.text[self.current] != expected: return False
 
         self.current+=1
         return True
@@ -85,7 +85,7 @@ class scanner:
         
         self.advance()
 
-        value = self.text[start+1:current]
+        value = self.text[self.start+1:self.current]
         self.addToken(tokenTypes.STRING, value)
 
     def number(self):
@@ -96,7 +96,7 @@ class scanner:
         
         while self.peek().isdigit(): self.advance()
 
-        addToken(tokenTypes.NUMBER, float(self.text[start:current+1]))
+        self.addToken(tokenTypes.NUMBER, float(self.text[self.start:self.current+1]))
     
     def peekNext(self):
         if self.current+1 >= len(self.text): return '\0'
@@ -113,7 +113,13 @@ class scanner:
         self.addToken(type)
     
     def isAlpha(c):
-        return ("a" <= c and c <= "z") or ("A" <= c and c <= "Z") or c == "_",
+        return ("a" <= c and c <= "z") or ("A" <= c and c <= "Z") or (c == "_")
 
     def isAlnum(c):
         return scanner.isAlpha(c) or c.isdigit()
+
+print("Running Test #1")
+input1 = 'print "Hello World" 2 + 2 = 4'
+output1 = scanner(input1).scanTokens()
+print("Input:", input1)
+print("Output:", output1)
