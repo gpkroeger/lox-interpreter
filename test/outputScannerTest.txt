@@ -1,0 +1,96 @@
+Running Test #1
+Test #1 passed: True
+Running Test #2
+Test #2 passed: True
+Running Test #3
+Test #3 passed: True
+Running Test #4
+Test #4 passed: True
+Running Test #5
+Test #5 passed: True
+
+Test #1 input:
+print "Hello World";
+Test #1 full output:
+Identifier: tokenTypes.PRINT Lexeme: print Literal Value: None
+Identifier: tokenTypes.STRING Lexeme: "Hello World" Literal Value: Hello World
+Identifier: tokenTypes.SEMICOLON Lexeme: ; Literal Value: None
+Identifier: tokenTypes.EOF Lexeme:  Literal Value: None
+
+Test #2 input:
+var language = "lox";
+Test #2 full output:
+Identifier: tokenTypes.VAR Lexeme: var Literal Value: None
+Identifier: tokenTypes.IDENTIFIER Lexeme: language Literal Value: None
+Identifier: tokenTypes.EQUAL Lexeme: = Literal Value: None
+Identifier: tokenTypes.STRING Lexeme: "lox" Literal Value: lox
+Identifier: tokenTypes.SEMICOLON Lexeme: ; Literal Value: None
+Identifier: tokenTypes.EOF Lexeme:  Literal Value: None
+
+Test #3 input:
+var x = 0.2431 + 4.1353;
+Test #3 full output:
+Identifier: tokenTypes.VAR Lexeme: var Literal Value: None
+Identifier: tokenTypes.IDENTIFIER Lexeme: x Literal Value: None
+Identifier: tokenTypes.EQUAL Lexeme: = Literal Value: None
+Identifier: tokenTypes.NUMBER Lexeme: 0.2431 Literal Value: 0.2431
+Identifier: tokenTypes.PLUS Lexeme: + Literal Value: None
+Identifier: tokenTypes.NUMBER Lexeme: 4.1353 Literal Value: 4.1353
+Identifier: tokenTypes.SEMICOLON Lexeme: ; Literal Value: None
+Identifier: tokenTypes.EOF Lexeme:  Literal Value: None
+
+Test #4 input:
+if(2+2!=4) {                   var i = 4;              else {                          var i = 5;              }
+Test #4 full output:
+Identifier: tokenTypes.IF Lexeme: if Literal Value: None
+Identifier: tokenTypes.LEFT_PAREN Lexeme: ( Literal Value: None
+Identifier: tokenTypes.NUMBER Lexeme: 2 Literal Value: 2.0
+Identifier: tokenTypes.PLUS Lexeme: + Literal Value: None
+Identifier: tokenTypes.NUMBER Lexeme: 2 Literal Value: 2.0
+Identifier: tokenTypes.BANG_EQUAL Lexeme: != Literal Value: None
+Identifier: tokenTypes.NUMBER Lexeme: 4 Literal Value: 4.0
+Identifier: tokenTypes.RIGHT_PAREN Lexeme: ) Literal Value: None
+Identifier: tokenTypes.LEFT_BRACE Lexeme: { Literal Value: None
+Identifier: tokenTypes.VAR Lexeme: var Literal Value: None
+Identifier: tokenTypes.IDENTIFIER Lexeme: i Literal Value: None
+Identifier: tokenTypes.EQUAL Lexeme: = Literal Value: None
+Identifier: tokenTypes.NUMBER Lexeme: 4 Literal Value: 4.0
+Identifier: tokenTypes.SEMICOLON Lexeme: ; Literal Value: None
+Identifier: tokenTypes.ELSE Lexeme: else Literal Value: None
+Identifier: tokenTypes.LEFT_BRACE Lexeme: { Literal Value: None
+Identifier: tokenTypes.VAR Lexeme: var Literal Value: None
+Identifier: tokenTypes.IDENTIFIER Lexeme: i Literal Value: None
+Identifier: tokenTypes.EQUAL Lexeme: = Literal Value: None
+Identifier: tokenTypes.NUMBER Lexeme: 5 Literal Value: 5.0
+Identifier: tokenTypes.SEMICOLON Lexeme: ; Literal Value: None
+Identifier: tokenTypes.RIGHT_BRACE Lexeme: } Literal Value: None
+Identifier: tokenTypes.EOF Lexeme:  Literal Value: None
+
+Test #5 input:
+while(x == 5){                         z = x + 1;                          var test = "Hello Lox";             x= x + 1;                       
+Test #5 full output:
+Identifier: tokenTypes.WHILE Lexeme: while Literal Value: None
+Identifier: tokenTypes.LEFT_PAREN Lexeme: ( Literal Value: None
+Identifier: tokenTypes.IDENTIFIER Lexeme: x Literal Value: None
+Identifier: tokenTypes.EQUAL_EQUAL Lexeme: == Literal Value: None
+Identifier: tokenTypes.NUMBER Lexeme: 5 Literal Value: 5.0
+Identifier: tokenTypes.RIGHT_PAREN Lexeme: ) Literal Value: None
+Identifier: tokenTypes.LEFT_BRACE Lexeme: { Literal Value: None
+Identifier: tokenTypes.IDENTIFIER Lexeme: z Literal Value: None
+Identifier: tokenTypes.EQUAL Lexeme: = Literal Value: None
+Identifier: tokenTypes.IDENTIFIER Lexeme: x Literal Value: None
+Identifier: tokenTypes.PLUS Lexeme: + Literal Value: None
+Identifier: tokenTypes.NUMBER Lexeme: 1 Literal Value: 1.0
+Identifier: tokenTypes.SEMICOLON Lexeme: ; Literal Value: None
+Identifier: tokenTypes.VAR Lexeme: var Literal Value: None
+Identifier: tokenTypes.IDENTIFIER Lexeme: test Literal Value: None
+Identifier: tokenTypes.EQUAL Lexeme: = Literal Value: None
+Identifier: tokenTypes.STRING Lexeme: "Hello Lox" Literal Value: Hello Lox
+Identifier: tokenTypes.SEMICOLON Lexeme: ; Literal Value: None
+Identifier: tokenTypes.IDENTIFIER Lexeme: x Literal Value: None
+Identifier: tokenTypes.EQUAL Lexeme: = Literal Value: None
+Identifier: tokenTypes.IDENTIFIER Lexeme: x Literal Value: None
+Identifier: tokenTypes.PLUS Lexeme: + Literal Value: None
+Identifier: tokenTypes.NUMBER Lexeme: 1 Literal Value: 1.0
+Identifier: tokenTypes.SEMICOLON Lexeme: ; Literal Value: None
+Identifier: tokenTypes.EOF Lexeme:  Literal Value: None

@@ -60,7 +60,7 @@ class scanner:
         return res
     
     def addToken(self, type, literal=None):
-        res = self.text[self.start:self.current+1]
+        res = self.text[self.start:self.current]
         self.tokens.append(Token( type, res, literal, self.line ))
 
     def match(self, expected):
@@ -85,7 +85,7 @@ class scanner:
         
         self.advance()
 
-        value = self.text[self.start+1:self.current]
+        value = self.text[self.start+1:self.current-1].strip()
         self.addToken(tokenTypes.STRING, value)
 
     def number(self):
@@ -96,20 +96,20 @@ class scanner:
         
         while self.peek().isdigit(): self.advance()
 
-        self.addToken(tokenTypes.NUMBER, float(self.text[self.start:self.current+1]))
+        self.addToken(tokenTypes.NUMBER, float(self.text[self.start:self.current]))
     
     def peekNext(self):
         if self.current+1 >= len(self.text): return '\0'
-        return source[current+1]
+        return self.text[self.current+1]
 
     def identifier(self):
         while scanner.isAlnum(self.peek()): 
             self.advance()
 
-        res = self.text[self.start:self.current+1]
+        res = self.text[self.start:self.current]
         type = tokenTypes.IDENTIFIER
-        if res.lower() in keywords:
-            type = keywords[res]
+        if res.lower().strip() in keywords:
+            type = keywords[res.lower().strip()]
         self.addToken(type)
     
     def isAlpha(c):
@@ -117,9 +117,3 @@ class scanner:
 
     def isAlnum(c):
         return scanner.isAlpha(c) or c.isdigit()
-
-print("Running Test #1")
-input1 = 'print "Hello World" 2 + 2 = 4'
-output1 = scanner(input1).scanTokens()
-print("Input:", input1)
-print("Output:", output1)
