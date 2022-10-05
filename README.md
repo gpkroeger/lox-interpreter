@@ -1,6 +1,6 @@
 This is a lox interpreter in python
 
-Authors: Gabe Kroeger and Owen Russel
+Authors: Gabe Kroeger and Owen Russell
 
 TESTING NOTES:
 To run a test, please run one of the files in the test folder with this command:
