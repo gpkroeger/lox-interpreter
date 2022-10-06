@@ -1,11 +1,12 @@
 from Token import Token
 from tokenTypes import tokenTypes
+from typing import List
 
 class parseError(Exception):
     pass
 
 class parser:
-    def __init__(self, tokens):
+    def __init__(self, tokens: List[Token]) ->None:
         self.finalTokens = tokens
         self.current = 0
 
@@ -28,9 +29,27 @@ class parser:
 
     def peek(self):
         return self.tokens[self.current]
+    
+    def previous(self):
+        return self.tokens[self.current - 1]
+    
+    def advance(self):
+        if not self.isEnd():
+            self.current += 1
+        return self.previous()
+    def check(self, type, tokenType):
+        if self.isEnd():
+            return False
+        else:
+            return self.peek().type == type
 
     def isEnd(self):
         return self.peek().type == tokenTypes.EOF
+
+    def error(self, type: tokenTypes, message: str):
+        if self.check(type):
+            return self.advance()
+        raise self.error(self.peek(), message)
 
     #def expr(self):
     #    return equality()
