@@ -1,4 +1,3 @@
-from lib2to3.pgen2 import token
 from Token import Token
 from tokenTypes import tokenTypes
 from typing import List
@@ -20,7 +19,7 @@ class parser:
     def declaration(self):
         try:
             if self.match(tokenTypes.CLASS):
-                return self.classDeclaration()
+                return self.classDeclaration() 
             if self.match(tokenTypes.FUN):
                 return self.function("function")
             if self.match(tokenTypes.VAR):
@@ -39,7 +38,7 @@ class parser:
         if not self.isEnd():
             self.current += 1
         return self.previous()
-        
+
     def check(self, type, tokenType):
         if self.isEnd():
             return False
