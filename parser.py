@@ -1,4 +1,5 @@
-import Token, tokenTypes, expression, statements
+from Token import Token
+from tokenTypes import tokenTypes
 
 class parser:
     def __init__(self, tokens):
@@ -10,4 +11,8 @@ class parser:
 
     def isEnd(self):
         return self.peek().type == tokenTypes.EOF
+
+    def expr(self):
+        return equality()
+    
     
