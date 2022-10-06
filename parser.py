@@ -1,3 +1,4 @@
+from lib2to3.pgen2 import token
 from Token import Token
 from tokenTypes import tokenTypes
 from typing import List
@@ -15,6 +16,7 @@ class parser:
         while not self.isEnd():
             statements.append(self.declaration())
         return statements
+
     def declaration(self):
         try:
             if self.match(tokenTypes.CLASS):
@@ -37,14 +39,15 @@ class parser:
         if not self.isEnd():
             self.current += 1
         return self.previous()
+        
     def check(self, type, tokenType):
         if self.isEnd():
             return False
         else:
-            return self.peek().type == type
+            return self.peek().tokType == tokenType
 
     def isEnd(self):
-        return self.peek().type == tokenTypes.EOF
+        return self.peek().tokType == tokenTypes.EOF
 
     def error(self, type: tokenTypes, message: str):
         if self.check(type):
