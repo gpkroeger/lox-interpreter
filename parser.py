@@ -72,6 +72,42 @@ class parser:
         left = self.factor()
         while self.match(tokenTypes.MINUS, tokenTypes.PLUS):
             left = Binary(left, self.previous, self.factor())
+        return left
+    
+    def factor(self):
+        left = self.unary()
+        while self.match(tokenTypes.SLASH, tokenTypes.STAR):
+            left = Binary(left, self.previous(), self.unary())
+        return left
+
+    def unary(self):
+        if self.match(tokenTypes.MINUS, tokenTypes.BANG):
+            return Unary(self.previous(), self.unary())
+        else:
+            return self.call()
+    
+    def call(self):
+        expr = self.primary()
+        while True:
+            if self.match(tokenTypes.LEFT_PAREN):
+                expr = self.finishCall(expr)
+            if self.match(tokenTypes.DOT):
+                name = self.consume(tokenTypes.IDENTIFIER, "Expected function name after .")
+                expr = Get(expr, name)
+            else:
+                break
+        return expr
+        
+    def finishCall(self, expr):
+        args = []
+        if not self.check(tokenTypes.RIGHT_PAREN):
+            args.append(self.expression())
+            while self.match(tokenTypes.COMMA):
+                if len(args) >= 255:
+                    self.error(self.peek(), "Max of 255 Arguments")
+                args.append(self.expression())
+        paren = self.consume(tokenTypes.RIGHT_PAREN, "Expected a ')'.")
+        return Call(expr, paren, args)
     
     def consume(self, toktype: tokenTypes, msg: str):
         if self.check(toktype):
