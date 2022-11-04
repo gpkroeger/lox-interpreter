@@ -29,6 +29,7 @@ Stmt = Union[
 ]
 
 T = TypeVar("T")
+Program = List[Stmt]
 
 @dataclass
 class Expression:
@@ -57,7 +58,6 @@ class If:
     def accept(self, visitor: "StmtVisitor[T]") -> T:
         return visitor.visit_if(self)
 
-Program = List[Stmt]
 
 @dataclass
 class Print:
