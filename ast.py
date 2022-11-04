@@ -17,7 +17,99 @@ Expr = Union[
     "This",
     "Super",
 ]
-T = TypeVar("T")
+
+Stmt = Union[
+    "Expression",
+    "If",
+    "Print",
+    "While",
+    "Var",
+    "Block",
+    "Function",
+]
+
+TTYPE = TypeVar("TTYPE")
+
+@dataclass
+class Expression:
+    expression: Expr
+
+    def accept(self, visitor: "StmtVisitor[TTYPE]") -> TTYPE:
+        return visitor.visit_expression(self)
+
+
+@dataclass
+class Class:
+    name: Token
+    superclass: Optional["Variable"]
+    methods: List["Function"]
+
+    def accept(self, visitor: "StmtVisitor[TTYPE]") -> TTYPE:
+        return visitor.visit_class(self)
+
+
+@dataclass
+class If:
+    condition: Expr
+    then_branch: Stmt
+    else_branch: Optional[Stmt]
+
+    def accept(self, visitor: "StmtVisitor[TTYPE]") -> TTYPE:
+        return visitor.visit_if(self)
+
+Program = List[Stmt]
+
+@dataclass
+class Print:
+    expression: Expr
+
+    def accept(self, visitor: "StmtVisitor[TTYPE]") -> TTYPE:
+        return visitor.visit_print(self)
+
+
+@dataclass
+class While:
+    condition: Expr
+    body: Stmt
+
+    def accept(self, visitor: "StmtVisitor[TTYPE]") -> TTYPE:
+        return visitor.visit_while(self)
+
+
+@dataclass
+class Var:
+    name: Token
+    initializer: Optional[Expr]
+
+    def accept(self, visitor: "StmtVisitor[TTYPE]") -> TTYPE:
+        return visitor.visit_var(self)
+
+
+@dataclass
+class Block:
+    statements: List[Stmt]
+
+    def accept(self, visitor: "StmtVisitor[TTYPE]") -> TTYPE:
+        return visitor.visit_block(self)
+
+
+@dataclass
+class Function:
+    name: Token
+    params: List[Token]
+    body: List[Stmt]
+
+    def accept(self, visitor: "StmtVisitor[TTYPE]") -> TTYPE:
+        return visitor.visit_function(self)
+
+
+@dataclass
+class Return:
+    keyword: Token
+    value: Optional[Expr]
+
+    def accept(self, visitor: "StmtVisitor[TTYPE]") -> TTYPE:
+        return visitor.visit_return(self)
 
 @dataclass
 class Binary:
@@ -25,7 +117,7 @@ class Binary:
     operator: Token
     right: Expr
 
-    def accept(self, visitor: "ExprVisitor[T]") -> T:
+    def accept(self, visitor: "ExprVisitor[TTYPE]") -> TTYPE:
         return visitor.visit_binary(self)
 
 
@@ -35,7 +127,7 @@ class Logical:
     operator: Token
     right: Expr
 
-    def accept(self, visitor: "ExprVisitor[T]") -> T:
+    def accept(self, visitor: "ExprVisitor[TTYPE]") -> TTYPE:
         return visitor.visit_logical(self)
 
 
@@ -43,7 +135,7 @@ class Logical:
 class Grouping:
     expression: Expr
 
-    def accept(self, visitor: "ExprVisitor[T]") -> T:
+    def accept(self, visitor: "ExprVisitor[TTYPE]") -> TTYPE:
         return visitor.visit_grouping(self)
 
 
@@ -51,7 +143,7 @@ class Grouping:
 class Literal:
     value: Any
 
-    def accept(self, visitor: "ExprVisitor[T]") -> T:
+    def accept(self, visitor: "ExprVisitor[TTYPE]") -> TTYPE:
         return visitor.visit_literal(self)
 
 
@@ -59,7 +151,7 @@ class Literal:
 class Variable:
     name: Token
 
-    def accept(self, visitor: "ExprVisitor[T]") -> T:
+    def accept(self, visitor: "ExprVisitor[TTYPE]") -> TTYPE:
         return visitor.visit_variable(self)
 
 
@@ -68,7 +160,7 @@ class Unary:
     operator: Token
     right: Expr
 
-    def accept(self, visitor: "ExprVisitor[T]") -> T:
+    def accept(self, visitor: "ExprVisitor[TTYPE]") -> TTYPE:
         return visitor.visit_unary(self)
 
 
@@ -78,7 +170,7 @@ class Call:
     token: Token
     arguments: List[Expr]
 
-    def accept(self, visitor: "ExprVisitor[T]") -> T:
+    def accept(self, visitor: "ExprVisitor[TTYPE]") -> TTYPE:
         return visitor.visit_call(self)
 
 
@@ -87,7 +179,7 @@ class Assign:
     name: Token
     value: Expr
 
-    def accept(self, visitor: "ExprVisitor[T]") -> T:
+    def accept(self, visitor: "ExprVisitor[TTYPE]") -> TTYPE:
         return visitor.visit_assign(self)
 
 
@@ -97,7 +189,7 @@ class Set:
     name: Token
     value: Expr
 
-    def accept(self, visitor: "ExprVisitor[T]") -> T:
+    def accept(self, visitor: "ExprVisitor[TTYPE]") -> TTYPE:
         return visitor.visit_set(self)
 
 
@@ -106,7 +198,7 @@ class Get:
     object: Expr
     name: Token
 
-    def accept(self, visitor: "ExprVisitor[T]") -> T:
+    def accept(self, visitor: "ExprVisitor[TTYPE]") -> TTYPE:
         return visitor.visit_get(self)
 
 
@@ -114,7 +206,7 @@ class Get:
 class This:
     keyword: Token
 
-    def accept(self, visitor: "ExprVisitor[T]") -> T:
+    def accept(self, visitor: "ExprVisitor[TTYPE]") -> TTYPE:
         return visitor.visit_this(self)
 
 
@@ -123,55 +215,92 @@ class Super:
     keyword: Token
     method: Token
 
-    def accept(self, visitor: "ExprVisitor[T]") -> T:
+    def accept(self, visitor: "ExprVisitor[TTYPE]") -> TTYPE:
         return visitor.visit_super(self)
 
 
-class ExprVisitor(abc.ABC, Generic[T]):
+class ExprVisitor(abc.ABC, Generic[TTYPE]):
     @abc.abstractmethod
-    def visit_binary(self, expr: Binary) -> T:
+    def visit_binary(self, expr: Binary) -> TTYPE:
         pass
 
     @abc.abstractmethod
-    def visit_grouping(self, expr: Grouping) -> T:
+    def visit_grouping(self, expr: Grouping) -> TTYPE:
         pass
 
     @abc.abstractmethod
-    def visit_literal(self, expr: Literal) -> T:
+    def visit_literal(self, expr: Literal) -> TTYPE:
         pass
 
     @abc.abstractmethod
-    def visit_unary(self, expr: Unary) -> T:
+    def visit_unary(self, expr: Unary) -> TTYPE:
         pass
 
     @abc.abstractmethod
-    def visit_call(self, expr: Call) -> T:
+    def visit_call(self, expr: Call) -> TTYPE:
         pass
 
     @abc.abstractmethod
-    def visit_variable(self, expr: Variable) -> T:
+    def visit_variable(self, expr: Variable) -> TTYPE:
         pass
 
     @abc.abstractmethod
-    def visit_assign(self, expr: Assign) -> T:
+    def visit_assign(self, expr: Assign) -> TTYPE:
         pass
 
     @abc.abstractmethod
-    def visit_logical(self, expr: Logical) -> T:
+    def visit_logical(self, expr: Logical) -> TTYPE:
         pass
 
     @abc.abstractmethod
-    def visit_set(self, expr: Set) -> T:
+    def visit_set(self, expr: Set) -> TTYPE:
         pass
 
     @abc.abstractmethod
-    def visit_get(self, expr: Get) -> T:
+    def visit_get(self, expr: Get) -> TTYPE:
         pass
 
     @abc.abstractmethod
-    def visit_this(self, expr: This) -> T:
+    def visit_this(self, expr: This) -> TTYPE:
         pass
 
     @abc.abstractmethod
-    def visit_super(self, expr: Super) -> T:
+    def visit_super(self, expr: Super) -> TTYPE:
+        pass
+
+class StmtVisitor(abc.ABC, Generic[TTYPE]):
+    @abc.abstractmethod
+    def visit_expression(self, stmt: Expression) -> TTYPE:
+        pass
+
+    @abc.abstractmethod
+    def visit_if(self, stmt: If) -> TTYPE:
+        pass
+
+    @abc.abstractmethod
+    def visit_print(self, stmt: Print) -> TTYPE:
+        pass
+
+    @abc.abstractmethod
+    def visit_while(self, stmt: While) -> TTYPE:
+        pass
+
+    @abc.abstractmethod
+    def visit_var(self, stmt: Var) -> TTYPE:
+        pass
+
+    @abc.abstractmethod
+    def visit_block(self, stmt: Block) -> TTYPE:
+        pass
+
+    @abc.abstractmethod
+    def visit_function(self, stmt: Function) -> TTYPE:
+        pass
+
+    @abc.abstractmethod
+    def visit_return(self, stmt: Return) -> TTYPE:
+        pass
+
+    @abc.abstractmethod
+    def visit_class(self, stmt: Class) -> TTYPE:
         pass
