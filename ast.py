@@ -84,14 +84,12 @@ class Var:
     def accept(self, visitor: "StmtVisitor[T]") -> T:
         return visitor.visit_var(self)
 
-
 @dataclass
 class Block:
     statements: List[Stmt]
 
     def accept(self, visitor: "StmtVisitor[T]") -> T:
         return visitor.visit_block(self)
-
 
 @dataclass
 class Function:
@@ -101,7 +99,6 @@ class Function:
 
     def accept(self, visitor: "StmtVisitor[T]") -> T:
         return visitor.visit_function(self)
-
 
 @dataclass
 class Return:
@@ -120,7 +117,6 @@ class Binary:
     def accept(self, visitor: "ExprVisitor[T]") -> T:
         return visitor.visit_binary(self)
 
-
 @dataclass
 class Logical:
     left: Expr
@@ -138,14 +134,12 @@ class Grouping:
     def accept(self, visitor: "ExprVisitor[T]") -> T:
         return visitor.visit_grouping(self)
 
-
 @dataclass
 class Literal:
     value: Any
 
     def accept(self, visitor: "ExprVisitor[T]") -> T:
         return visitor.visit_literal(self)
-
 
 @dataclass
 class Variable:
@@ -154,7 +148,6 @@ class Variable:
     def accept(self, visitor: "ExprVisitor[T]") -> T:
         return visitor.visit_variable(self)
 
-
 @dataclass
 class Unary:
     operator: Token
@@ -162,7 +155,6 @@ class Unary:
 
     def accept(self, visitor: "ExprVisitor[T]") -> T:
         return visitor.visit_unary(self)
-
 
 @dataclass
 class Call:
@@ -173,7 +165,6 @@ class Call:
     def accept(self, visitor: "ExprVisitor[T]") -> T:
         return visitor.visit_call(self)
 
-
 @dataclass
 class Assign:
     name: Token
@@ -181,7 +172,6 @@ class Assign:
 
     def accept(self, visitor: "ExprVisitor[T]") -> T:
         return visitor.visit_assign(self)
-
 
 @dataclass
 class Set:
@@ -192,7 +182,6 @@ class Set:
     def accept(self, visitor: "ExprVisitor[T]") -> T:
         return visitor.visit_set(self)
 
-
 @dataclass
 class Get:
     object: Expr
@@ -201,14 +190,12 @@ class Get:
     def accept(self, visitor: "ExprVisitor[T]") -> T:
         return visitor.visit_get(self)
 
-
 @dataclass
 class This:
     keyword: Token
 
     def accept(self, visitor: "ExprVisitor[T]") -> T:
         return visitor.visit_this(self)
-
 
 @dataclass
 class Super:
@@ -217,7 +204,6 @@ class Super:
 
     def accept(self, visitor: "ExprVisitor[T]") -> T:
         return visitor.visit_super(self)
-
 
 class ExprVisitor(abc.ABC, Generic[T]):
     @abc.abstractmethod
