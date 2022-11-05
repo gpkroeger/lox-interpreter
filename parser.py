@@ -20,18 +20,157 @@ class parser:
 
     def declaration(self):
         try:
-            #if self.match(tokenTypes.CLASS):
-            #    return self.classDeclaration() 
+            if self.match(tokenTypes.CLASS):
+                return self.declareClass()
             if self.match(tokenTypes.FUN):
                 return self.function("function")
             if self.match(tokenTypes.VAR):
-                return self.varDeclaration()
+                return self.declareVariable()
+
             return self.statement()
         except parseError:
+            self.synchronize()
             return None
-    
+
+    def declareClass(self):
+        name = self.consume(tokenTypes.IDENTIFIER, "Expect class name.")
+        sClass = None
+        if self.match(tokenTypes.LESS):
+            self.consume(tokenTypes.IDENTIFIER, "Expect superclass name")
+            sClass = Variable(self.previous())
+        self.consume(tokenTypes.LEFT_BRACE, "Expect '{' before class body.")
+        methods = []
+        while not self.check(tokenTypes.RIGHT_BRACE) and not self.is_at_end():
+            methods.append(self.function("method"))
+        self.consume(tokenTypes.RIGHT_BRACE, "Expect '}' after class body.")
+        return Class(name, sClass, methods)
+
+    def declareVariable(self):
+        name = self.consume(tokenTypes.IDENTIFIER, "Expect variable name.")
+        initializer = None
+        if self.match(tokenTypes.EQUAL):
+            initializer = self.expression()
+        self.consume(tokenTypes.SEMICOLON, "Expect ';' after variable declaration.")
+        return Var(name, initializer)
+
+    def function(self, kind):
+        name = self.consume(tokenTypes.IDENTIFIER, f"Expect {kind} name.")
+        self.consume(tokenTypes.LEFT_PAREN, f"Expect '(' after {kind} name.")
+        parameters = []
+        if not self.check(tokenTypes.RIGHT_PAREN):
+            parameters.append(self.consume(tokenTypes.IDENTIFIER, "Expect parameter name."))
+
+            while self.match(tokenTypes.COMMA):
+                if len(parameters) >= 255:
+                    self.error(self.peek(), "Can't have more than 255 parameters.")
+                parameters.append(
+                    self.consume(tokenTypes.IDENTIFIER, "Expect parameter name.")
+                )
+        self.consume(tokenTypes.RIGHT_PAREN, f"Expect ')' after {kind} parameters.")
+        self.consume(tokenTypes.LEFT_BRACE, "Expect '{' before the " f"{kind} body.")
+        body = self.block()
+        return Function(name, parameters, body)
+
+    def parameters(self):
+        return []
+
+    def statement(self):
+        if self.match(tokenTypes.RETURN):
+            return self.return_statement()
+        if self.match(tokenTypes.PRINT):
+            return self.print_statement()
+        if self.match(tokenTypes.IF):
+            return self.if_statement()
+        if self.match(tokenTypes.WHILE):
+            return self.while_statement()
+        if self.match(tokenTypes.FOR):
+            return self.for_statement()
+        if self.match(tokenTypes.LEFT_BRACE):
+            return Block(self.block())
+
+        return self.expressionStatement()
+
+    def return_statement(self):
+        keyword = self.previous()
+        value = None
+        if not self.check(tokenTypes.SEMICOLON):
+            value = self.expression()
+        self.consume(tokenTypes.SEMICOLON, "Expect ';' after return value.")
+        return Return(keyword, value)
+
+    def if_statement(self):
+        self.consume(tokenTypes.LEFT_PAREN, "Expect '(' after 'if'")
+        condition = self.expression()
+        self.consume(tokenTypes.RIGHT_PAREN, "Expect ')' after if condition.")
+        then_branch = self.statement()
+        else_branch = None
+        if self.match(tokenTypes.ELSE):
+            else_branch = self.statement()
+        return If(condition, then_branch, else_branch)
+
+    def print_statement(self):
+        expr = self.expression()
+        self.consume(tokenTypes.SEMICOLON, "Expect ';' after value.")
+        return Print(expr)
+
+    def while_statement(self):
+        self.consume(tokenTypes.LEFT_PAREN, "Expect '(' after 'while'")
+        condition = self.expression()
+        self.consume(tokenTypes.RIGHT_PAREN, "Expect ')' after while condition.")
+
+        return While(condition, self.statement())
+
+    def for_statement(self):
+        self.consume(tokenTypes.LEFT_PAREN, "Expect '(' after 'for'")
+
+        if self.match(tokenTypes.SEMICOLON):
+            initializer = None
+        elif self.match(tokenTypes.VAR):
+            initializer = self.declareVariable()
+        else:
+            initializer = self.expressionStatement()
+
+        if self.check(tokenTypes.SEMICOLON):
+            condition = None
+        else:
+            condition = self.expression()
+        self.consume(tokenTypes.SEMICOLON, "Expect ';' after for condition.")
+
+        if self.check(tokenTypes.RIGHT_PAREN):
+            increment = None
+        else:
+            increment = self.expression()
+        self.consume(tokenTypes.RIGHT_PAREN, "Expect ')' after for clauses.")
+
+        body = self.statement()
+
+        initializer_list: List[Stmt] = [] if initializer is None else [initializer]
+        condition_expr = Literal(True) if condition is None else condition
+        increment_list: List[Stmt] = (
+            [] if increment is None else [Expression(increment)]
+        )
+
+        return Block(
+            initializer_list + [While(condition_expr, Block([body] + increment_list))]
+        )
+
     def expression(self):
         return self.assignment()
+
+    def block(self):
+        statements = []
+
+        while not self.check(tokenTypes.RIGHT_BRACE) and not self.is_at_end():
+            statements.append(self.declaration())
+
+        self.consume(tokenTypes.RIGHT_BRACE, "Expect '}' after block.")
+
+        return statements
+
+    def expressionStatement(self):
+        expr = self.expression()
+        self.consume(tokenTypes.SEMICOLON, "Expect ';' after expression.")
+        return Expression(expr)
     
     def assignment(self):
         expr = self.logicalOR()
@@ -146,5 +285,47 @@ class parser:
             return self.advance()
         raise self.error(self.peek(), message)
 
+    def primary(self) -> Expr:
+        if self.match(tokenTypes.FALSE):
+            return Literal(False)
+        elif self.match(tokenTypes.TRUE):
+            return Literal(True)
+        elif self.match(tokenTypes.NIL):
+            return Literal(None)
+        elif self.match(tokenTypes.NUMBER, tokenTypes.STRING):
+            return Literal(self.previous().literal)
+        elif self.match(tokenTypes.THIS):
+            return This(self.previous())
+        elif self.match(tokenTypes.SUPER):
+            keyword = self.previous()
+            self.consume(tokenTypes.DOT, "Expect '.' after 'super'")
+            method = self.consume(tokenTypes.IDENTIFIER, "Expect superclass method name")
+            return Super(keyword, method)
+        elif self.match(tokenTypes.IDENTIFIER):
+            return Variable(self.previous())
+        elif self.match(tokenTypes.LEFT_PAREN):
+            expr = self.expression()
+            self.consume(tokenTypes.RIGHT_PAREN, "Expect ')' after expression")
+            return Grouping(expr)
+        else:
+            raise self.error(self.peek(), "Expect expression")
+
+    def synchronize(self):
+        self.advance()
+        while not self.is_at_end():
+            if self.previous().ttype == tokenTypes.SEMICOLON:
+                return
+            if self.peek().ttype in {
+                tokenTypes.CLASS,
+                tokenTypes.FUN,
+                tokenTypes.VAR,
+                tokenTypes.FOR,
+                tokenTypes.IF,
+                tokenTypes.WHILE,
+                tokenTypes.PRINT,
+                tokenTypes.RETURN,
+            }:
+                return
+            self.advance()
     
     
