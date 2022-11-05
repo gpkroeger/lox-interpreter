@@ -76,7 +76,7 @@ class parser:
 
     def statement(self):
         if self.match(tokenTypes.RETURN):
-            return self.return_statement()
+            return self.returnStatement()
         if self.match(tokenTypes.PRINT):
             return self.print_statement()
         if self.match(tokenTypes.IF):
@@ -90,7 +90,7 @@ class parser:
 
         return self.expressionStatement()
 
-    def return_statement(self):
+    def returnStatement(self):
         keyword = self.previous()
         value = None
         if not self.check(tokenTypes.SEMICOLON):
