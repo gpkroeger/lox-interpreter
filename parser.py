@@ -2,7 +2,7 @@ from lib2to3.pgen2 import token
 from Token import Token
 from tokenTypes import tokenTypes
 from typing import List
-from .ast import *
+from .evals import *
 
 class parseError(Exception):
     pass
