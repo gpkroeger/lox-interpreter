@@ -38,7 +38,6 @@ class Expression:
     def accept(self, visitor: "StmtVisitor[T]") -> T:
         return visitor.visit_expression(self)
 
-
 @dataclass
 class Class:
     name: Token
@@ -47,7 +46,6 @@ class Class:
 
     def accept(self, visitor: "StmtVisitor[T]") -> T:
         return visitor.visit_class(self)
-
 
 @dataclass
 class If:
@@ -58,14 +56,12 @@ class If:
     def accept(self, visitor: "StmtVisitor[T]") -> T:
         return visitor.visit_if(self)
 
-
 @dataclass
 class Print:
     expression: Expr
 
     def accept(self, visitor: "StmtVisitor[T]") -> T:
         return visitor.visit_print(self)
-
 
 @dataclass
 class While:
@@ -74,7 +70,6 @@ class While:
 
     def accept(self, visitor: "StmtVisitor[T]") -> T:
         return visitor.visit_while(self)
-
 
 @dataclass
 class Var:
@@ -125,7 +120,6 @@ class Logical:
 
     def accept(self, visitor: "ExprVisitor[T]") -> T:
         return visitor.visit_logical(self)
-
 
 @dataclass
 class Grouping:
