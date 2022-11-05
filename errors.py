@@ -17,7 +17,7 @@ def newError(token: Token, message):
     if token.tokenTypes == tokenTypes.EOF:
         report(token.lineNum, "at", message)
     else:
-        report(token.lineNum, "at '{token.lexeme}'", message)
+        report(token.lineNum, "at {token.lexeme}", message)
 
 class InterpretError(Exception):
     def __init__(self, token, message):
