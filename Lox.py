@@ -6,6 +6,8 @@
 
 import sys
 import string
+from scanner import scanner
+from parser import parser
 
 class Lox:
     hadError = False
