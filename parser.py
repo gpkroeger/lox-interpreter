@@ -78,13 +78,13 @@ class parser:
         if self.match(tokenTypes.RETURN):
             return self.returnStatement()
         if self.match(tokenTypes.PRINT):
-            return self.print_statement()
+            return self.printStatement()
         if self.match(tokenTypes.IF):
-            return self.if_statement()
+            return self.ifStatement()
         if self.match(tokenTypes.WHILE):
-            return self.while_statement()
+            return self.whileStatement()
         if self.match(tokenTypes.FOR):
-            return self.for_statement()
+            return self.forStatement()
         if self.match(tokenTypes.LEFT_BRACE):
             return Block(self.block())
 
@@ -98,7 +98,7 @@ class parser:
         self.consume(tokenTypes.SEMICOLON, "Expect ';' after return value.")
         return Return(keyword, value)
 
-    def if_statement(self):
+    def ifStatement(self):
         self.consume(tokenTypes.LEFT_PAREN, "Expect '(' after 'if'")
         condition = self.expression()
         self.consume(tokenTypes.RIGHT_PAREN, "Expect ')' after if condition.")
@@ -108,21 +108,20 @@ class parser:
             else_branch = self.statement()
         return If(condition, then_branch, else_branch)
 
-    def print_statement(self):
+    def printStatement(self):
         expr = self.expression()
         self.consume(tokenTypes.SEMICOLON, "Expect ';' after value.")
         return Print(expr)
 
-    def while_statement(self):
+    def whileStatement(self):
         self.consume(tokenTypes.LEFT_PAREN, "Expect '(' after 'while'")
         condition = self.expression()
         self.consume(tokenTypes.RIGHT_PAREN, "Expect ')' after while condition.")
 
         return While(condition, self.statement())
 
-    def for_statement(self):
+    def forStatement(self):
         self.consume(tokenTypes.LEFT_PAREN, "Expect '(' after 'for'")
-
         if self.match(tokenTypes.SEMICOLON):
             initializer = None
         elif self.match(tokenTypes.VAR):
@@ -141,30 +140,20 @@ class parser:
         else:
             increment = self.expression()
         self.consume(tokenTypes.RIGHT_PAREN, "Expect ')' after for clauses.")
-
         body = self.statement()
-
         initializer_list: List[Stmt] = [] if initializer is None else [initializer]
         condition_expr = Literal(True) if condition is None else condition
-        increment_list: List[Stmt] = (
-            [] if increment is None else [Expression(increment)]
-        )
-
-        return Block(
-            initializer_list + [While(condition_expr, Block([body] + increment_list))]
-        )
+        increment_list: List[Stmt] = ([] if increment is None else [Expression(increment)])
+        return Block( initializer_list + [While(condition_expr, Block([body] + increment_list))])
 
     def expression(self):
         return self.assignment()
 
     def block(self):
         statements = []
-
         while not self.check(tokenTypes.RIGHT_BRACE) and not self.is_at_end():
             statements.append(self.declaration())
-
         self.consume(tokenTypes.RIGHT_BRACE, "Expect '}' after block.")
-
         return statements
 
     def expressionStatement(self):
