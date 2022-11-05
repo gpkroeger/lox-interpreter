@@ -8,37 +8,28 @@ import sys
 import string
 from scanner import scanner
 from parser import parser
+from errors import *
 
-class Lox:
-    hadError = False
+def runFile(fileName):
+    inputFile = open(fileName, 'r')
+    rawText = inputFile.read()
+    run(rawText)
 
-    def runFile(fileName):
-        inputFile = open(fileName, 'r')
-        rawText = inputFile.read()
-        run(rawText)
+def runPrompt():
+    while True:
+        line = input("> ")
+        if not line or len(line) == 0:
+            break
+        run(line)
+        hadError = False
 
-    def runPrompt():
-        while True:
-            line = input("> ")
-            if not line or len(line) == 0:
-                break
-            run(line)
-            hadError = False
-
-    def run(source):
-        # scanny = scanner(source)
-        # for token in scanny.scanTokens():
-        #     print(token)
-        #indicate an error and exit gracefully
-        if hadError:
-            exit(65)
-
-    def error(line, msg):
-        report(line, "", message)
-    
-    def report(msg, where):
-        print('[line ', line, '] Error', where, ":", message)
-        hadError = True
+def run(source):
+    # scanny = scanner(source)
+    # for token in scanny.scanTokens():
+    #     print(token)
+    #indicate an error and exit gracefully
+    if Globals.iError:
+        exit(65)
 
 if __name__ == "__main__":
     # print(f"Arguments count: {len(sys.argv)}")
@@ -47,9 +38,9 @@ if __name__ == "__main__":
     argc = len(argv)
 
     if argc == 1:
-        Lox.runPrompt()
+        runPrompt()
     elif argc == 2:
-        Lox.runFile(argv[1])
+        runFile(argv[1])
     else:
         print('Error, incorrect number of arguments')
         exit(64)
