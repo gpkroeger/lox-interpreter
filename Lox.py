@@ -21,7 +21,7 @@ def runPrompt():
         if not line or len(line) == 0:
             break
         run(line)
-        hadError = False
+        Globals.iError = False
 
 def run(source):
     Scanner = scanner(source)
