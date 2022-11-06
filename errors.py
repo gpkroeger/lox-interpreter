@@ -14,6 +14,10 @@ def report(line, where, errorMessage):
     print("[line {line}] Error{where}: {message}")
     Globals.iError  = True
 
+def runtimeError(error):
+    print(f"line {error.token.line} Runtime error: {error.message}")
+    Globals.iRuntime = True
+
 def newError(token: Token, message):
     if token.tokenTypes == tokenTypes.EOF:
         report(token.lineNum, "at", message)
