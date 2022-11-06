@@ -24,12 +24,13 @@ def runPrompt():
         hadError = False
 
 def run(source):
-    # scanny = scanner(source)
-    # for token in scanny.scanTokens():
-    #     print(token)
-    #indicate an error and exit gracefully
-    if Globals.iError:
-        exit(65)
+    Scanner = scanner(source)
+    tokens = Scanner.scanTokens()
+    Parser = parser(tokens)
+    res = parser.parse()
+
+    if res is None or Globals.iError:
+        return
 
 if __name__ == "__main__":
     # print(f"Arguments count: {len(sys.argv)}")

@@ -22,4 +22,3 @@ def checkBothOperand(token, left, right):
     if isNumber(left) and isNumber(right):
         return
     raise InterpretError(token, "Operands must be numbers.")
-
