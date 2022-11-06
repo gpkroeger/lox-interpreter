@@ -8,7 +8,7 @@ class parseError(Exception):
     pass
 
 class parser:
-    def __init__(self, tokens: List[Token]) ->None:
+    def __init__(self, tokens: List[Token]) -> None:
         self.finalTokens = tokens
         self.current = 0
 

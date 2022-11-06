@@ -27,7 +27,7 @@ def run(source):
     Scanner = scanner(source)
     tokens = Scanner.scanTokens()
     Parser = parser(tokens)
-    res = parser.parse()
+    res = Parser.parse()
 
     if res is None or Globals.iError:
         return
