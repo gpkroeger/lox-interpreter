@@ -9,6 +9,7 @@ import string
 from scanner import scanner
 from parser import parser
 from errors import *
+from interpreter import *
 
 def runFile(fileName):
     inputFile = open(fileName, 'r')
@@ -31,6 +32,13 @@ def run(source):
 
     if res is None or Globals.iError:
         return
+    interpreter = Interpreter()
+    resolver = Resolver(interpreter)
+    resolver.resolve_list(res)
+
+    if Globals.iError:
+        return
+    interpreter.visit_statements(res)
 
 if __name__ == "__main__":
     # print(f"Arguments count: {len(sys.argv)}")
