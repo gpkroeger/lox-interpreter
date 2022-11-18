@@ -32,7 +32,7 @@ def runPrompt():
 def run(source):
     Scanner = scanner(source)
     tokens = Scanner.scanTokens()
-    Parser = parser(tokens)
+    Parser = Parser(tokens)
     res = Parser.parse()
 
     if res is None or Globals.iError:
@@ -47,10 +47,8 @@ def run(source):
 
 if __name__ == "__main__":
     # print(f"Arguments count: {len(sys.argv)}")
-
     argv = sys.argv
     argc = len(argv)
-
     if argc == 1:
         runPrompt()
     elif argc == 2:
