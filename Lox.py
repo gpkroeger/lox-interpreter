@@ -6,8 +6,9 @@
 
 import sys
 import string
+
 from scanner import scanner
-from parser import parser
+from parser import Parser
 from errors import *
 from interpreter import *
 

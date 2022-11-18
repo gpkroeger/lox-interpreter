@@ -1,7 +1,8 @@
 import string
-from Lox import Lox
+#from Lox import Lox
 from tokenTypes import tokenTypes, keywords
 from Token import Token
+from errors import *
 
 class scanner:
     def __init__(self, rawText):
@@ -52,7 +53,7 @@ class scanner:
         elif c.isdigit(): self.number()
         elif scanner.isAlnum(c): self.identifier()
         else:
-            Lox.error(self.line, "Unexpected character")
+            newError(self.line, "Unexpected character")
 
     def advance(self):
         res = self.text[self.current]
@@ -80,7 +81,7 @@ class scanner:
             self.advance()
         
         if self.atEnd():
-            Lox.error(line, "Unterminated string.")
+            newError(self.line, "Unterminated string.")
             return
         
         self.advance()
