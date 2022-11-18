@@ -15,6 +15,10 @@ def runFile(fileName):
     inputFile = open(fileName, 'r')
     rawText = inputFile.read()
     run(rawText)
+    if Globals.iError:
+        exit()
+    if Globals.iRuntime:
+        exit()
 
 def runPrompt():
     while True:
