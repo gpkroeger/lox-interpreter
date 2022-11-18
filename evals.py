@@ -2,6 +2,7 @@ from typing import Generic, Union, List, Optional, TypeVar, Union, Any
 from dataclasses import dataclass
 from Token import Token
 import abc
+from env import *
 
 Expr = Union[
     "Binary",
@@ -198,6 +199,24 @@ class Super:
 
     def accept(self, visitor: "ExprVisitor[T]") -> T:
         return visitor.visit_super(self)
+
+class AbstractInterpreter(Generic[T]):
+    @abc.abstractmethod
+    def visit_statements(
+        self, stmts: List[Stmt], env: Optional[Environment] = None
+    ) -> T:
+        pass
+
+
+class LoxCallable(abc.ABC):
+    @abc.abstractmethod
+    def call(self, interpreter: AbstractInterpreter[Any], arguments: List[Any]) -> Any:
+        raise NotImplementedError
+
+    @property
+    @abc.abstractmethod
+    def arity(self) -> int:
+        raise NotImplementedError
 
 class ExprVisitor(abc.ABC, Generic[T]):
     @abc.abstractmethod
