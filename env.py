@@ -2,7 +2,7 @@ from errors import InterpretError
 from evals import *
 from Token import Token
 from tokenTypes import tokenTypes
-from typing import Dict, cast
+from typing import Any, Dict, cast, Optional
 
 class Environment:
     def __init__(self, enclosing: Optional["Environment"] = None):
