@@ -5,6 +5,7 @@ from tokenTypes import tokenTypess
 from env import Environment
 from enum import Enum, auto
 from collections import deque
+from typing import cast
 
 class rException(Exception):
     def __init__(self, val):
