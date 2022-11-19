@@ -1,8 +1,8 @@
-from typing import Generic, Union, List, Optional, TypeVar, Union, Any
+from typing import Generic, Union, List, Optional, TypeVar, Any
 from dataclasses import dataclass
 from Token import Token
 import abc
-from env import *
+from env import Environment
 
 Expr = Union[
     "Binary",
@@ -212,7 +212,6 @@ class LoxCallable(abc.ABC):
     @abc.abstractmethod
     def call(self, interpreter: AbstractInterpreter[Any], arguments: List[Any]) -> Any:
         raise NotImplementedError
-
     @property
     @abc.abstractmethod
     def arity(self) -> int:
