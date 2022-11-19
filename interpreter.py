@@ -1,9 +1,8 @@
-from unittest.mock import NonCallableMock
 from errors import *
 from evals import *
 from Token import Token
 from tokenTypes import tokenTypess
-from env import *
+from env import Environment
 from enum import Enum, auto
 from collections import deque
 
