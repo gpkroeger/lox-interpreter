@@ -261,9 +261,9 @@ class Interpreter(StmtVisitor[None], ExprVisitor[Any], AbstractInterpreter[Any])
 
     def visit_unary(self, unary: Unary):
         right = self.visit_expr(unary.right)
-        if unary.operator.ttype == tokenTypes.MINUS:
+        if unary.operator.tokType == tokenTypes.MINUS:
             return -right
-        elif unary.operator.ttype == tokenTypes.BANG:
+        elif unary.operator.tokType == tokenTypes.BANG:
             return not iTruth(right)
         else:
             raise InterpretError(unary.operator, "Invalid unary operator")
@@ -272,48 +272,48 @@ class Interpreter(StmtVisitor[None], ExprVisitor[Any], AbstractInterpreter[Any])
         left = self.visit_expr(binary.left)
         right = self.visit_expr(binary.right)
 
-        if binary.operator.ttype == tokenTypes.MINUS:
+        if binary.operator.tokType == tokenTypes.MINUS:
             checkBothOperand(binary.operator, left, right)
             return left - right
-        elif binary.operator.ttype == tokenTypes.SLASH:
+        elif binary.operator.tokType == tokenTypes.SLASH:
             checkBothOperand(binary.operator, left, right)
             if right == 0:
                 raise InterpretError(binary.operator, "Division by zero")
             return left / right
-        elif binary.operator.ttype == tokenTypes.STAR:
+        elif binary.operator.tokType == tokenTypes.STAR:
             checkBothOperand(binary.operator, left, right)
             return left * right
-        elif binary.operator.ttype == tokenTypes.PLUS:
+        elif binary.operator.tokType == tokenTypes.PLUS:
             if isinstance(left, str) and isinstance(right, str):
                 return left + right
             checkBothOperand(binary.operator, left, right)
             return left + right
-        elif binary.operator.ttype == tokenTypes.GREATER:
+        elif binary.operator.tokType == tokenTypes.GREATER:
             checkBothOperand(binary.operator, left, right)
             return left > right
-        elif binary.operator.ttype == tokenTypes.GREATER_EQUAL:
+        elif binary.operator.tokType == tokenTypes.GREATER_EQUAL:
             checkBothOperand(binary.operator, left, right)
             return left >= right
-        elif binary.operator.ttype == tokenTypes.LESS:
+        elif binary.operator.tokType == tokenTypes.LESS:
             checkBothOperand(binary.operator, left, right)
             return left < right
-        elif binary.operator.ttype == tokenTypes.LESS_EQUAL:
+        elif binary.operator.tokType == tokenTypes.LESS_EQUAL:
             checkBothOperand(binary.operator, left, right)
             return left <= right
-        elif binary.operator.ttype == tokenTypes.BANG_EQUAL:
+        elif binary.operator.tokType == tokenTypes.BANG_EQUAL:
             return not isEqual(left, right)
-        elif binary.operator.ttype == tokenTypes.EQUAL_EQUAL:
+        elif binary.operator.tokType == tokenTypes.EQUAL_EQUAL:
             return isEqual(left, right)
         else:
             raise InterpretError(binary.operator, "Unsupported binary operator")
 
     def visit_logical(self, logical: Logical):
-        if logical.operator.ttype == tokenTypes.OR:
+        if logical.operator.tokType == tokenTypes.OR:
             left = self.visit_expr(logical.left)
             if iTruth(left):
                 return left
             return self.visit_expr(logical.right)
-        elif logical.operator.ttype == tokenTypes.AND:
+        elif logical.operator.tokType == tokenTypes.AND:
             left = self.visit_expr(logical.left)
             if iTruth(left):
                 return self.visit_expr(logical.right)
@@ -383,6 +383,8 @@ class Interpreter(StmtVisitor[None], ExprVisitor[Any], AbstractInterpreter[Any])
                 expr.method, f"Undefined property '{expr.method.lexeme}'."
             )
         return method.bind(object)
+
+# ------------------------------ Up to Here Should be Working -------------------------------
 
 class FunctionType(Enum):
     NONE = auto()
