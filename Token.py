@@ -1,4 +1,3 @@
-
 class Token:
     def __init__(self, tokType, lexeme, literal, lineNum):
         self.tokType = tokType
