@@ -1,6 +1,5 @@
 from enum import Enum, auto
-
-class tokenTypes(Enum):
+class TokenType(Enum):
     #single character tokens
     LEFT_PAREN = auto()
     RIGHT_PAREN = auto()
@@ -14,7 +13,7 @@ class tokenTypes(Enum):
     SLASH = auto()
     STAR = auto()
 
-    #either one or two character tokens
+    #one || two character tokens
     BANG = auto()
     BANG_EQUAL = auto()
     EQUAL = auto()
@@ -49,22 +48,3 @@ class tokenTypes(Enum):
 
     #EOF
     EOF = auto()
-
-keywords = {
-    "and":tokenTypes.AND,
-    "class":tokenTypes.CLASS,
-    "else":tokenTypes.ELSE,
-    "false":tokenTypes.FALSE,
-    "fun":tokenTypes.FUN,
-    "for":tokenTypes.FOR,
-    "if":tokenTypes.IF,
-    "nil":tokenTypes.NIL,
-    "or":tokenTypes.OR,
-    "print":tokenTypes.PRINT,
-    "return":tokenTypes.RETURN,
-    "super":tokenTypes.SUPER,
-    "this":tokenTypes.THIS,
-    "tru":tokenTypes.TRUE,
-    "var":tokenTypes.VAR,
-    "while":tokenTypes.WHILE
-}
