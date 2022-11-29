@@ -48,10 +48,10 @@ class Resolver(Visitor,StmtVisitor):
 
     def visitReturnStmt(self, stmt:Return):
         if self.currentFunction == FunctionType.NONE:
-            fLox.FLOX.error(stmt.keyword,"Cant return from top level code")
+            fLox.floxx.error(stmt.keyword,"Cant return from top level code")
         if stmt.value is not None:
             if self.currentFunction == FunctionType.INITIALIZER:
-                fLox.FLOX.error(stmt.keyword,"Cant return value from an initializer")
+                fLox.floxx.error(stmt.keyword,"Cant return value from an initializer")
             self.resolve(stmt.value)
         return None
 
@@ -67,7 +67,7 @@ class Resolver(Visitor,StmtVisitor):
         self.declare(stmt.name)
         self.define(stmt.name)
         if stmt.superclass is not None and stmt.name.lexeme==stmt.superclass.name.lexeme:
-            fLox.FLOX.error(stmt.superclass.name,"A class can not inherit from itself")
+            fLox.floxx.error(stmt.superclass.name,"A class can not inherit from itself")
         if stmt.superclass is not None:
             self.currentClass=ClassType.SUBCLASS
             self.resolve(stmt.superclass)
@@ -90,7 +90,7 @@ class Resolver(Visitor,StmtVisitor):
     
     def visitVariableExpr(self, expr:Variable):
         if len(self.scopes)!=0 and self.scopes[-1].get(expr.name.lexeme) is False:
-            fLox.FLOX.error(expr.name,"Cant read local var without initalizer.")
+            fLox.floxx.error(expr.name,"Cant read local var without initalizer.")
         self.resolveLocal(expr,expr.name)
         return None
 
@@ -137,14 +137,14 @@ class Resolver(Visitor,StmtVisitor):
 
     def visitThisExpr(self,expr:This):
         if self.currentClass==ClassType.NONE:
-            fLox.FLOX.error(expr.keyword,"Cant use this outside of a class")
+            fLox.floxx.error(expr.keyword,"Cant use this outside of a class")
             return None
         self.resolveLocal(expr,expr.keyword)
         return None
 
     def visitSuperExpr(self,expr:Super):
         if self.currentClass!=ClassType.SUBCLASS:
-            fLox.FLOX.error(expr.keyword,"Cant use super with no subclass")
+            fLox.floxx.error(expr.keyword,"Cant use super with no subclass")
         self.resolveLocal(expr,expr.keyword)
         return None
 
@@ -182,7 +182,7 @@ class Resolver(Visitor,StmtVisitor):
             return
         scope=self.scopes[-1] 
         if scope.get(name.lexeme) is not None:
-            fLox.FLOX.error(name,"Variable is already defined in this scope")
+            fLox.floxx.error(name,"Variable is already defined in this scope")
         scope[name.lexeme]=False 
 
     def define(self,name:Token):

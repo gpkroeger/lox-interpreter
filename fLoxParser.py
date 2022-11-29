@@ -40,7 +40,7 @@ class Parser:
         raise self.error(next,message)
 
     def error(self,token,message):
-        fLox.FLOX.tokenError(token,message)
+        fLox.floxx.tokenError(token,message)
         return ParseError()
 
     

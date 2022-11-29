@@ -7,7 +7,7 @@ from fLoxResolver import Resolver
 from fLoxInterpreter import Interpreter
 
 
-class FLOX(object):
+class floxx(object):
     ErrorOccured = False
     def __init__(self):
         super().__init__()
@@ -18,7 +18,7 @@ class FLOX(object):
         with open(filepath, 'r') as file:
             self.data = file.read()
         self.run(self.data)
-        if FLOX.ErrorOccured:
+        if floxx.ErrorOccured:
             exit(65)
     
     def runPrompt(self):
@@ -30,7 +30,7 @@ class FLOX(object):
                 print("Leaving REPL Mode...")
                 break
             self.run(line)
-            FLOX.ErrorOccured=False
+            floxx.ErrorOccured=False
              
 
     def run(self,source:str):
@@ -39,7 +39,7 @@ class FLOX(object):
         parser=Parser(tokens)
         statments=parser.parse()
         resolver=Resolver(self.interpreter)
-        if FLOX.ErrorOccured:
+        if floxx.ErrorOccured:
             return;
         resolver.resolve(statments)
         self.interpreter.interpret(statments)
@@ -50,22 +50,22 @@ class FLOX(object):
    
     @staticmethod
     def error(line:int,message:str):
-        FLOX.report(line,"",message)
+        floxx.report(line,"",message)
 
     @staticmethod
     def tokenError(token:Token,message:str):
         if token.type==TokenType.EOF:
-            FLOX.report(token.line,"at end",message)
+            floxx.report(token.line,"at end",message)
         else:
-            FLOX.report(token.line,"at '"+token.lexeme+"'",message)
+            floxx.report(token.line,"at '"+token.lexeme+"'",message)
 
     @staticmethod
     def runtimeError(error:RunTimeError):
-        FLOX.hadError=True
+        floxx.hadError=True
         print(error.message+" [line"+str(error.token.line)+"]")
 
     @staticmethod
     def report(line:int,where:str,message:str):
         print("line {} error, {}:{}".format(line,where,message))
-        FLOX.hadError=True
+        floxx.hadError=True
 

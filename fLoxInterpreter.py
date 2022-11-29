@@ -199,12 +199,6 @@ class Interpreter(Visitor,StmtVisitor):
         self.environment.assign(stmt.name,klass)
         return None
 
-
-
-    
-    
-
-
     def evaluate(self, expr:Expr):
         return expr.accept(self)
 
@@ -263,7 +257,7 @@ class Interpreter(Visitor,StmtVisitor):
             for statment in statments:
                 self.execute(statment)
         except RunTimeError as e:
-            fLox.FLOX.runtimeError(e)
+            fLox.floxx.runtimeError(e)
 
     def execute(self, stmt:Stmt):
         stmt.accept(self) 
