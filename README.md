@@ -5,7 +5,7 @@ Authors: Gabe Kroeger and Owen Russell
 TESTING NOTES:
 To run a test outside of our GUI, please run one of the files in the test folder with this command:
 
-python3 main.py > <name of .lox file>
+    python3 main.py > <name of .lox file>
 
 For ease of use, you can run:
 
