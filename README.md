@@ -17,4 +17,4 @@ or
 
 This will open our GUI, here you can mess around with our provided test programs in the tests directory, or run your own LOX programs.
 
-[GUI still in development]
+*GUI still in development*
