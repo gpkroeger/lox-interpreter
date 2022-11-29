@@ -334,28 +334,3 @@ class Parser:
             methods.append(self.function("method"))
         self.consume(TokenType.RIGHT_BRACE,"Expect } after class body")
         return Class(name,superclass,methods)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
