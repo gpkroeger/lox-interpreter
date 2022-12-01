@@ -4,15 +4,7 @@ import os, sys
 import GUImain
 import subprocess
 
-# class IORedirector(object):
-#     def __init__(self,TEXT_INFO):
-#         self.TEXT_INFO = TEXT_INFO
-
-# class StdoutRedirector(IORedirector):
-#         def write(self,str):
-#            self.TEXT_INFO.config(text=self.TEXT_INFO.cget('text') + str)
-
-class TextRedirector(object):
+class TextRedirector(object):   #Redirect for the STD-Out generated through interpretation
     def __init__(self, widget, tag="stdout"):
         self.widget = widget
         self.tag = tag
@@ -23,21 +15,17 @@ class TextRedirector(object):
         self.widget.configure(state="disabled")
 
 root = tk.Tk()
-apps = []
+loxApplication = []
 
 def selectFile():
-    apps.clear()
+    loxApplication.clear()    #To only allow 1 file to be attached
     filename = filedialog.askopenfilename(initialdir= os.getcwd() + "/tests/", title="Select Lox File", filetypes=[("LOX files", "*.lox")])
     fileName.config(text = filename)
-    apps.append(fileName)
+    loxApplication.append(fileName)
     
 def runInterpreter():
-    #FileOutput.config(text="")
     sys.stdout = TextRedirector(FileOutput)
-    GUImain.runningFile(apps[0])
-
-def ClearTerm():
-    FileOutput.config(text="")
+    GUImain.runningFile(loxApplication[0])
 
 wrapper = tk.LabelFrame(root, text="Select Lox File")
 wrapper.pack(fill="both", expand="yes", padx=10, pady=10)
