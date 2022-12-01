@@ -1,0 +1,8 @@
+var A = 0;
+var temp;
+
+for(var B = 1; A < 1000; B = temp+B){
+    print A;
+    temp = A;
+    A = B;
+}
