@@ -2,32 +2,37 @@ import tkinter as tk
 from tkinter import filedialog, Text
 import os, sys
 import GUImain
-import subprocess
+#Secondary GUI for testing
 
-class IORedirector(object):
-    def __init__(self,TEXT_INFO):
-        self.TEXT_INFO = TEXT_INFO
+class TextRedirector(object):   #File-Like Struct for Redirecting STD-Out into the textbox
+    def __init__(self, widget, tag="stdout"):
+        self.widget = widget
+        self.tag = tag
 
-class StdoutRedirector(IORedirector):
-        def write(self,str):
-           self.TEXT_INFO.config(text=self.TEXT_INFO.cget('text') + str)
+    def write(self, str):
+        self.widget.configure(state="normal")
+        self.widget.insert("end", str, (self.tag,))
+        self.widget.configure(state="disabled")
+
+    def flush(self):
+        pass
 
 root = tk.Tk()
-apps = []
+loxApplication = []
+root.geometry("600x600")
+root.title("The fLox Interpreter GUI")
+root.resizable(False, False)
+
 
 def selectFile():
-    apps.clear()
+    loxApplication.clear()    #To only allow 1 file to be attached
     filename = filedialog.askopenfilename(initialdir= os.getcwd() + "/tests/", title="Select Lox File", filetypes=[("LOX files", "*.lox")])
     fileName.config(text = filename)
-    apps.append(fileName)
+    loxApplication.append(fileName)
     
 def runInterpreter():
-    FileOutput.config(text="")
-    sys.stdout = StdoutRedirector(FileOutput)
-    GUImain.runningFile(apps[0])
-
-def ClearTerm():
-    FileOutput.config(text="")
+    print("\nOutput From Application:\n" + loxApplication[0]['text'] + "\n")
+    GUImain.runningFile(loxApplication[0])
 
 wrapper = tk.LabelFrame(root, text="Select Lox File")
 wrapper.pack(fill="both", expand="yes", padx=10, pady=10)
@@ -45,25 +50,16 @@ btn = tk.Button(wrapper, text="Browse", command=selectFile)
 btn.pack(side=tk.RIGHT, padx=10, pady=10)
 
 
-FileOutput = tk.Label(wrapper2, text="", borderwidth=5)
-# v = tk.Scrollbar(root, orient="vertical")
-# v.pack(side=tk.RIGHT, fill="y")
-# v.config(command=root.yview)
-FileOutput.pack(pady = 10)
+FileOutput = tk.Text(wrapper2, borderwidth=5)
+sys.stdout = TextRedirector(FileOutput)
 
-clearOutput = tk.Button(wrapper2, text="Clear Terminal", command=ClearTerm)
+#Trying to add a scrollbar to see output
+v = tk.Scrollbar(wrapper2, orient="vertical")
+v.pack(side=tk.RIGHT, fill="y")
+v.config(command=FileOutput.yview)
 
+FileOutput.pack(pady = 2, padx=2)
 
-# FileOutput = tk.Label(root, text="", borderwidth=5)
-# FileOutput.pack(pady = 20)
+#clearOutput = tk.Button(wrapper2, text="Clear Terminal", command=ClearTerm)
 
-# runLox = tk.Button(root, text="Run fLox!", padx=18, pady=4, fg="white", bg="#181818", command=runInterpreter)
-# runLox.pack(side="bottom")
-
-# attachFile = tk.Button(root, text="Pick Lox File", padx=10, pady=5, fg="white", bg="#181818", command=selectFile)
-# attachFile.pack(side="bottom")
-
-root.geometry("600x600")
-root.title("The fLox Interpreter GUI")
-root.resizable(False, False)
 root.mainloop()

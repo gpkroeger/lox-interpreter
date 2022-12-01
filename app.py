@@ -2,9 +2,8 @@ import tkinter as tk
 from tkinter import filedialog, Text
 import os, sys
 import GUImain
-import subprocess
 
-class TextRedirector(object):   #Redirect for the STD-Out generated through interpretation
+class TextRedirector(object):   #File-Like Struct for Redirecting STD-Out into the textbox
     def __init__(self, widget, tag="stdout"):
         self.widget = widget
         self.tag = tag

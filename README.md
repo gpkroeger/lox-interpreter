@@ -7,7 +7,7 @@ To run a test outside of our GUI, please run one of the files in the test folder
 
     python3 main.py > <name of .lox file>
 
-For ease of use, you can run:
+For ease of use, you can run our GUI by:
 
     py app.py
 
