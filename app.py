@@ -4,13 +4,23 @@ import os, sys
 import GUImain
 import subprocess
 
-class IORedirector(object):
-    def __init__(self,TEXT_INFO):
-        self.TEXT_INFO = TEXT_INFO
+# class IORedirector(object):
+#     def __init__(self,TEXT_INFO):
+#         self.TEXT_INFO = TEXT_INFO
 
-class StdoutRedirector(IORedirector):
-        def write(self,str):
-           self.TEXT_INFO.config(text=self.TEXT_INFO.cget('text') + str)
+# class StdoutRedirector(IORedirector):
+#         def write(self,str):
+#            self.TEXT_INFO.config(text=self.TEXT_INFO.cget('text') + str)
+
+class TextRedirector(object):
+    def __init__(self, widget, tag="stdout"):
+        self.widget = widget
+        self.tag = tag
+
+    def write(self, str):
+        self.widget.configure(state="normal")
+        self.widget.insert("end", str, (self.tag,))
+        self.widget.configure(state="disabled")
 
 root = tk.Tk()
 apps = []
@@ -22,8 +32,8 @@ def selectFile():
     apps.append(fileName)
     
 def runInterpreter():
-    FileOutput.config(text="")
-    sys.stdout = StdoutRedirector(FileOutput)
+    #FileOutput.config(text="")
+    sys.stdout = TextRedirector(FileOutput)
     GUImain.runningFile(apps[0])
 
 def ClearTerm():
@@ -45,23 +55,16 @@ btn = tk.Button(wrapper, text="Browse", command=selectFile)
 btn.pack(side=tk.RIGHT, padx=10, pady=10)
 
 
-FileOutput = tk.Label(wrapper2, text="", borderwidth=5)
-# v = tk.Scrollbar(root, orient="vertical")
-# v.pack(side=tk.RIGHT, fill="y")
-# v.config(command=root.yview)
+FileOutput = tk.Text(wrapper2, borderwidth=5)
+
+#Trying to add a scrollbar to see output
+v = tk.Scrollbar(root, orient="vertical")
+v.pack(side=tk.RIGHT, fill="y")
+v.config(command=FileOutput.yview)
+
 FileOutput.pack(pady = 10)
 
 clearOutput = tk.Button(wrapper2, text="Clear Terminal", command=ClearTerm)
-
-
-# FileOutput = tk.Label(root, text="", borderwidth=5)
-# FileOutput.pack(pady = 20)
-
-# runLox = tk.Button(root, text="Run fLox!", padx=18, pady=4, fg="white", bg="#181818", command=runInterpreter)
-# runLox.pack(side="bottom")
-
-# attachFile = tk.Button(root, text="Pick Lox File", padx=10, pady=5, fg="white", bg="#181818", command=selectFile)
-# attachFile.pack(side="bottom")
 
 root.geometry("600x600")
 root.title("The fLox Interpreter GUI")
