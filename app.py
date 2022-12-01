@@ -54,11 +54,11 @@ FileOutput = tk.Text(wrapper2, borderwidth=5)
 sys.stdout = TextRedirector(FileOutput)
 
 #Trying to add a scrollbar to see output
-v = tk.Scrollbar(root, orient="vertical")
+v = tk.Scrollbar(wrapper2, orient="vertical")
 v.pack(side=tk.RIGHT, fill="y")
 v.config(command=FileOutput.yview)
 
-FileOutput.pack(pady = 10)
+FileOutput.pack(pady = 2, padx=2)
 
 #clearOutput = tk.Button(wrapper2, text="Clear Terminal", command=ClearTerm)
 
