@@ -14,8 +14,15 @@ class TextRedirector(object):   #Redirect for the STD-Out generated through inte
         self.widget.insert("end", str, (self.tag,))
         self.widget.configure(state="disabled")
 
+    def flush(self):
+        pass
+
 root = tk.Tk()
 loxApplication = []
+root.geometry("600x600")
+root.title("The fLox Interpreter GUI")
+root.resizable(False, False)
+
 
 def selectFile():
     loxApplication.clear()    #To only allow 1 file to be attached
@@ -24,7 +31,7 @@ def selectFile():
     loxApplication.append(fileName)
     
 def runInterpreter():
-    sys.stdout = TextRedirector(FileOutput)
+    print("\nOutput From Application:\n" + loxApplication[0]['text'] + "\n")
     GUImain.runningFile(loxApplication[0])
 
 wrapper = tk.LabelFrame(root, text="Select Lox File")
@@ -44,6 +51,7 @@ btn.pack(side=tk.RIGHT, padx=10, pady=10)
 
 
 FileOutput = tk.Text(wrapper2, borderwidth=5)
+sys.stdout = TextRedirector(FileOutput)
 
 #Trying to add a scrollbar to see output
 v = tk.Scrollbar(root, orient="vertical")
@@ -52,9 +60,6 @@ v.config(command=FileOutput.yview)
 
 FileOutput.pack(pady = 10)
 
-clearOutput = tk.Button(wrapper2, text="Clear Terminal", command=ClearTerm)
+#clearOutput = tk.Button(wrapper2, text="Clear Terminal", command=ClearTerm)
 
-root.geometry("600x600")
-root.title("The fLox Interpreter GUI")
-root.resizable(False, False)
 root.mainloop()
