@@ -1,3 +1,4 @@
+//Testing of basic class Initialization
 class testingClasses{
     init(){
         var testVar = " This is the testingClass Variable";

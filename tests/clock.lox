@@ -1,1 +1,2 @@
+//Testing of the one built in stardard library function of Lox
 print clock();
