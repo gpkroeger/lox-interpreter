@@ -1,0 +1,6 @@
+fun functionTest2(string1, string2){
+    var concat = string1 + string2;
+    print concat;
+}
+
+functionTest2("Test", "String");
