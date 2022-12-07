@@ -55,9 +55,4 @@ class LoxFunction(LoxCallable):
         env.define("this",instance)
         return LoxFunction(self.declaration,env,self.isInit)
 
-
-
-
-
-
-    
+        
