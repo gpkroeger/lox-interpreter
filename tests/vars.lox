@@ -1,0 +1,11 @@
+var testVariable = 5;
+print "Integer Variable Test:";
+print testVariable; 
+
+var testVariableString = "Testing";
+print "String Variable Test:";
+print testVariableString; 
+
+var testVariableBool = false;
+print "Bool Variable Test:";
+print testVariableBool;

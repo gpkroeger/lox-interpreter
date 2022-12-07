@@ -1,0 +1,6 @@
+fun functionTest(integer1, integer2){
+    var answer = integer1 * integer2;
+    print answer;
+}
+
+functionTest(10,10);

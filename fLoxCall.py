@@ -52,7 +52,6 @@ class LoxFunction(LoxCallable):
         return "<fn {}>".format(self.declaration.name.lexeme)
 
     def bind(self,instance):
-        
         env=Environment.environment(self.closure)
         env.define("this",instance)
         return LoxFunction(self.declaration,env,self.isInit)

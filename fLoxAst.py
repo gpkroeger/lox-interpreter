@@ -16,7 +16,6 @@ class ClassType(Enum):
     SUBCLASS= auto()
 
 class ParseError(Exception):
-    """Base class for other exceptions"""
     pass
 
 class RunTimeError(Exception):

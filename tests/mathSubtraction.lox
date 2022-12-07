@@ -1,0 +1,3 @@
+var initialValue = 100;
+var newVal = initialValue - 10;
+print newVal;
