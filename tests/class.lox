@@ -1,0 +1,8 @@
+class testingClasses{
+    init(){
+        var testVar = " This is the testingClass Variable";
+        print testVar;
+    }
+}
+
+testingClasses();
