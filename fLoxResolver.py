@@ -51,7 +51,7 @@ class Resolver(Visitor,StmtVisitor):
             fLox.floxx.error(stmt.keyword,"Cant return from top level code")
         if stmt.value is not None:
             if self.currentFunction == FunctionType.INITIALIZER:
-                fLox.floxx.error(stmt.keyword,"Cant return value from an initializer")
+                fLox.floxx.error(stmt.keyword,"Cant return a value from an initializer")
             self.resolve(stmt.value)
         return None
 
