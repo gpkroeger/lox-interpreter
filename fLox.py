@@ -40,10 +40,6 @@ class floxx(object):
         resolver.resolve(statments)
         self.interpreter.interpret(statments)
        
-        
-        
-        
-   
     @staticmethod
     def error(line:int,message:str):
         floxx.report(line,"",message)
