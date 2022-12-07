@@ -1,0 +1,6 @@
+var cond = false;
+if(cond){
+    print "The Conditional was True";
+}else{
+    print "The Conditional was False";
+}
