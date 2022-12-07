@@ -1,0 +1,4 @@
+fun Foo(param){
+    var param = 10;
+}
+Foo(1); //Throw already defined error
