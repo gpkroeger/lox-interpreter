@@ -25,10 +25,6 @@ class floxx(object):
         while True:
             print(">", end='')
             line=input()
-            
-            if(len(line)==0):
-                print("Leaving REPL Mode...")
-                break
             self.run(line)
             floxx.ErrorOccured=False
              

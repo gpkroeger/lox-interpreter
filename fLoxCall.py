@@ -29,7 +29,6 @@ class LoxFunction(LoxCallable):
         self.closure=closure 
         self.isInit=isInitializer
 
-    
     def call(self,interpreter,arguments:list):
         env=Environment.environment(self.closure)
         for i in range(len(self.declaration.params)):
