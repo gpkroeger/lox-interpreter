@@ -1,24 +1,24 @@
 from fLoxToken import Token
-from fLoxTokenTypes import TokenType
+from fLoxTokenTypes import tokType
 import fLox
 
 keywords={
-    'and':TokenType.AND,
-    'class':TokenType.CLASS,
-    'else':TokenType.ELSE,
-    'false':TokenType.FALSE,
-    'for':TokenType.FOR,
-    'fun':TokenType.FUN,
-    'if':TokenType.IF,
-    'nil':TokenType.NIL,
-    'or':TokenType.OR,
-    'print':TokenType.PRINT,
-    'return':TokenType.RETURN,
-    'super':TokenType.SUPER,
-    'this':TokenType.THIS,
-    'true':TokenType.TRUE,
-    'var':TokenType.VAR,
-    'while':TokenType.WHILE
+    'and':tokType.AND,
+    'class':tokType.CLASS,
+    'else':tokType.ELSE,
+    'false':tokType.FALSE,
+    'for':tokType.FOR,
+    'fun':tokType.FUN,
+    'if':tokType.IF,
+    'nil':tokType.NIL,
+    'or':tokType.OR,
+    'print':tokType.PRINT,
+    'return':tokType.RETURN,
+    'super':tokType.SUPER,
+    'this':tokType.THIS,
+    'true':tokType.TRUE,
+    'var':tokType.VAR,
+    'while':tokType.WHILE
 }
 
 class Scanner(object):
@@ -33,52 +33,52 @@ class Scanner(object):
     def scanToken(self):
         c=self.advance()
         if c=='(':
-            self.addToken(TokenType.LEFT_PAREN)
+            self.addToken(tokType.LEFT_PAREN)
         elif c==')':
-            self.addToken(TokenType.RIGHT_PAREN)
+            self.addToken(tokType.RIGHT_PAREN)
         elif c=='{':
-            self.addToken(TokenType.LEFT_BRACE)
+            self.addToken(tokType.LEFT_BRACE)
         elif c=='}':
-            self.addToken(TokenType.RIGHT_BRACE)
+            self.addToken(tokType.RIGHT_BRACE)
         elif c==',':
-            self.addToken(TokenType.COMMA)
+            self.addToken(tokType.COMMA)
         elif c=='.':
-            self.addToken(TokenType.DOT)
+            self.addToken(tokType.DOT)
         elif c=='-':
-            self.addToken(TokenType.MINUS)
+            self.addToken(tokType.MINUS)
         elif c=='+':
-            self.addToken(TokenType.PLUS)
+            self.addToken(tokType.PLUS)
         elif c==';':
-            self.addToken(TokenType.SEMICOLON)
+            self.addToken(tokType.SEMICOLON)
         elif c=='*':
-            self.addToken(TokenType.STAR)
+            self.addToken(tokType.STAR)
         
         elif c=="!":
             if self.match('='):
-                self.addToken(TokenType.BANG_EQUAL)
+                self.addToken(tokType.BANG_EQUAL)
             else:
-                self.addToken(TokenType.BANG)
+                self.addToken(tokType.BANG)
         elif c=='=':
             if self.match('='):
-                self.addToken(TokenType.LESS_EQUAL)
+                self.addToken(tokType.LESS_EQUAL)
             else:
-                self.addToken(TokenType.EQUAL)
+                self.addToken(tokType.EQUAL)
         elif c=='<':
             if self.match('='):
-                self.addToken(TokenType.LESS_EQUAL)
+                self.addToken(tokType.LESS_EQUAL)
             else:
-                self.addToken(TokenType.LESS)
+                self.addToken(tokType.LESS)
         elif c=='>':
             if self.match('='):
-                self.addToken(TokenType.GREATER_EQUAL)
+                self.addToken(tokType.GREATER_EQUAL)
             else:
-                self.addToken(TokenType.GREATER)
+                self.addToken(tokType.GREATER)
         elif c=='/':
             if self.match('/'): 
                 while self.peek()!='\n' and not self.isAtEnd():
                     self.advance()
             else:
-                self.addToken(TokenType.SLASH)
+                self.addToken(tokType.SLASH)
         elif c in [' ','\r','\t']:
             pass
         elif c=='\n':
@@ -137,7 +137,7 @@ class Scanner(object):
              return
         self.advance()
         value=self.source[self.start+1:self.current-1] 
-        self.addToken(TokenType.STRING,value)
+        self.addToken(tokType.STRING,value)
 
     def isDigit(self,c:str)->bool:
         return c>='0' and c<='9'
@@ -155,7 +155,7 @@ class Scanner(object):
             self.advance()
             while self.isDigit(self.peek()):
                 self.advance()
-        self.addToken(TokenType.NUMBER,float(self.source[self.start:self.current]))
+        self.addToken(tokType.NUMBER,float(self.source[self.start:self.current]))
     
 
     def identifier(self):
@@ -164,18 +164,18 @@ class Scanner(object):
         text=self.source[self.start:self.current]
         type=keywords.get(text)
         if type is None:
-            type=TokenType.IDENTIFIER
+            type=tokType.IDENTIFIER
         self.addToken(type)
 
     def scanTokens(self)->list:
         while not self.isAtEnd():
             self.start = self.current
             self.scanToken()
-        self.tokens.append(Token(TokenType.EOF,"",None,self.line))
+        self.tokens.append(Token(tokType.EOF,"",None,self.line))
         return self.tokens
 
     
-    def addToken(self,type:TokenType,literal=None):
+    def addToken(self,type:tokType,literal=None):
         text=self.source[self.start:self.current]
         self.tokens.append(Token(type,text,literal,self.line))
 

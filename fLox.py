@@ -1,6 +1,6 @@
 from fLoxScanner import Scanner
 from fLoxToken import Token
-from fLoxTokenTypes import TokenType
+from fLoxTokenTypes import tokType
 from fLoxAst import *
 from fLoxParser import Parser
 from fLoxResolver import Resolver
@@ -50,7 +50,7 @@ class floxx(object):
 
     @staticmethod
     def tokenError(token:Token,message:str):
-        if token.type==TokenType.EOF:
+        if token.type==tokType.EOF:
             floxx.report(token.line,"at end",message)
         else:
             floxx.report(token.line,"at '"+token.lexeme+"'",message)

@@ -1,5 +1,5 @@
 from enum import Enum, auto
-class TokenType(Enum):
+class tokType(Enum):
     #single character tokens
     LEFT_PAREN = auto()
     RIGHT_PAREN = auto()

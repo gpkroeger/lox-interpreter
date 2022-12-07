@@ -19,37 +19,37 @@ class Interpreter(Visitor,StmtVisitor):
         left=self.evaluate(expr.left)
         right=self.evaluate(expr.right)
         t=expr.operator.type
-        if t==TokenType.MINUS:
+        if t==tokType.MINUS:
             self.checkNumberOperands(expr.operator,left,right)
             return float(left)-float(right)
-        elif t==TokenType.PLUS:
+        elif t==tokType.PLUS:
             if type(left) is float and type(right) is float:
                 return float(left)+float(right)
             elif type(left) is str and type(right) is str:
                 return str(left)+str(right)
             else:
                 raise RunTimeError(expr.operator,"Operands must be two numbers or two strings")
-        elif t==TokenType.SLASH:
+        elif t==tokType.SLASH:
             self.checkNumberOperands(expr.operator,left,right)
             return float(left)/float(right)
-        elif t==TokenType.STAR:
+        elif t==tokType.STAR:
             self.checkNumberOperands(expr.operator,left,right)
             return float(left)*float(right)
-        elif t==TokenType.GREATER:
+        elif t==tokType.GREATER:
             self.checkNumberOperands(expr.operator,left,right)
             return float(left)>float(right)
-        elif t==TokenType.GREATER_EQUAL:
+        elif t==tokType.GREATER_EQUAL:
             self.checkNumberOperands(expr.operator,left,right)
             return float(left)>=float(right)
-        elif t==TokenType.LESS:
+        elif t==tokType.LESS:
             self.checkNumberOperands(expr.operator,left,right)
             return float(left)<float(right)
-        elif t==TokenType.LESS_EQUAL:
+        elif t==tokType.LESS_EQUAL:
             self.checkNumberOperands(expr.operator,left,right)
             return float(left)<=float(right)
-        elif t==TokenType.BANG_EQUAL:
+        elif t==tokType.BANG_EQUAL:
             return not self.isEqual(left,right)
-        elif t==TokenType.EQUAL_EQUAL:
+        elif t==tokType.EQUAL_EQUAL:
             return self.isEqual(left,right)
         return None
 
@@ -59,9 +59,9 @@ class Interpreter(Visitor,StmtVisitor):
     def visitUnaryExpr(self, expr:Unary):
         rightVal=self.evaluate(expr.right)
         t=expr.operator.type
-        if t==TokenType.MINUS:
+        if t==tokType.MINUS:
             return -1.0*float(rightVal)
-        if t==TokenType.BANG:
+        if t==tokType.BANG:
             return not self.isTruthy(rightVal)
         return None
 
@@ -82,7 +82,7 @@ class Interpreter(Visitor,StmtVisitor):
 
     def visitLogicalExpr(self,expr:Logical):
         left=self.evaluate(expr.left)
-        if expr.operator.type==TokenType.OR:
+        if expr.operator.type==tokType.OR:
             if self.isTruthy(left):
                 return left
             else:

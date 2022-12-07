@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 from fLox import floxx
-from fLoxTokenTypes import TokenType
+from fLoxTokenTypes import tokType
 from fLoxToken import Token
 
 if __name__ == "__main__":

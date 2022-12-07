@@ -1,7 +1,7 @@
 
 from enum import Enum, auto
 from abc import ABC, abstractmethod
-from fLoxTokenTypes import TokenType
+from fLoxTokenTypes import tokType
 from fLoxToken import Token
 
 class FunctionType(Enum):

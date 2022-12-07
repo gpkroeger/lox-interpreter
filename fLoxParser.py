@@ -7,7 +7,7 @@ class Parser:
         self.current=0 
 
     def isAtEnd(self)->bool:
-        return self.peek().type is TokenType.EOF
+        return self.peek().type is tokType.EOF
 
     def peek(self)->Token:
         return self.tokens[self.current]
@@ -20,7 +20,7 @@ class Parser:
             self.current+=1
         return self.previous()
 
-    def check(self,type:TokenType)->bool:
+    def check(self,type:tokType)->bool:
         if self.isAtEnd():
             return False
         return self.peek().type==type
@@ -33,7 +33,7 @@ class Parser:
                 return True 
         return False
 
-    def consume(self,type:TokenType, message:str):
+    def consume(self,type:tokType, message:str):
         if self.check(type):
             return self.advance()
         next=self.peek()
@@ -50,7 +50,7 @@ class Parser:
     def assignment(self)->Expr:
         expr=self.logic_OR()
 
-        if self.match(TokenType.EQUAL):
+        if self.match(tokType.EQUAL):
             equals=self.previous()
             value=self.assignment()
 
@@ -68,7 +68,7 @@ class Parser:
 
     def logic_OR(self)->Expr:
         expr=self.logic_AND()
-        while self.match(TokenType.OR):
+        while self.match(tokType.OR):
             operator=self.previous()
             right=self.logic_AND()
             expr=Logical(expr,operator,right)
@@ -77,7 +77,7 @@ class Parser:
     
     def logic_AND(self)->Expr:
         expr=self.equality()
-        while self.match(TokenType.AND):
+        while self.match(tokType.AND):
             operator=self.previous()
             right=self.equality()
             expr=Logical(expr,operator,right)
@@ -87,7 +87,7 @@ class Parser:
     def equality(self)->Expr:
         
         expr=self.comparison()
-        while self.match(TokenType.BANG_EQUAL,TokenType.EQUAL_EQUAL):
+        while self.match(tokType.BANG_EQUAL,tokType.EQUAL_EQUAL):
             operator=self.previous()
             right=self.comparison()
             expr=Binary(expr,operator,right)
@@ -95,7 +95,7 @@ class Parser:
 
     def comparison(self)->Expr:
         expr=self.term()
-        while self.match(TokenType.GREATER,TokenType.GREATER_EQUAL,TokenType.LESS,TokenType.LESS_EQUAL):
+        while self.match(tokType.GREATER,tokType.GREATER_EQUAL,tokType.LESS,tokType.LESS_EQUAL):
             operator=self.previous()
             right=self.term()
             expr=Binary(expr,operator,right)
@@ -103,7 +103,7 @@ class Parser:
 
     def term(self)->Expr:
         expr=self.factor()
-        while self.match(TokenType.MINUS,TokenType.PLUS):
+        while self.match(tokType.MINUS,tokType.PLUS):
             operator=self.previous()
             right=self.factor()
             expr=Binary(expr,operator,right)
@@ -111,14 +111,14 @@ class Parser:
 
     def factor(self)->Expr:
         expr=self.unary()
-        while self.match(TokenType.SLASH,TokenType.STAR):
+        while self.match(tokType.SLASH,tokType.STAR):
             operator=self.previous()
             right=self.unary()
             expr=Binary(expr,operator,right)
         return expr 
 
     def unary(self)->Expr:
-        if self.match(TokenType.BANG,TokenType.MINUS):
+        if self.match(tokType.BANG,tokType.MINUS):
             operator=self.previous()
             right=self.unary()
             return Unary(operator,right)
@@ -128,10 +128,10 @@ class Parser:
     def call(self)->Expr:
         expr=self.primary()
         while True:
-            if self.match(TokenType.LEFT_PAREN):
+            if self.match(tokType.LEFT_PAREN):
                 expr=self.finishCall(expr)
-            elif self.match(TokenType.DOT):
-                name=self.consume(TokenType.IDENTIFIER,"Expected property name after '.'")
+            elif self.match(tokType.DOT):
+                name=self.consume(tokType.IDENTIFIER,"Expected property name after '.'")
                 expr=Get(expr,name)
             else:
                 break
@@ -139,39 +139,39 @@ class Parser:
 
     def finishCall(self,callee:Expr)->Expr:
         arguments=[]
-        if not self.check(TokenType.RIGHT_PAREN):
+        if not self.check(tokType.RIGHT_PAREN):
             while True:
                 if len(arguments)>=255:
                     self.error(self.peek(),"Can't handle more than 255 arguments. Reduce arguments.")
                 arguments.append(self.expression())
-                if not self.match(TokenType.COMMA):
+                if not self.match(tokType.COMMA):
                     break
-        paren=self.consume(TokenType.RIGHT_PAREN,"Expected ')' after arguments.")
+        paren=self.consume(tokType.RIGHT_PAREN,"Expected ')' after arguments.")
         return Call(callee,paren,arguments)
 
     
 
     def primary(self)->Expr:
-        if self.match(TokenType.FALSE):
+        if self.match(tokType.FALSE):
             return Literal(False)
-        elif self.match(TokenType.TRUE):
+        elif self.match(tokType.TRUE):
             return Literal(True)
-        elif self.match(TokenType.NIL):
+        elif self.match(tokType.NIL):
             return Literal(None)
-        elif self.match(TokenType.NUMBER,TokenType.STRING):
+        elif self.match(tokType.NUMBER,tokType.STRING):
             return Literal(self.previous().literal)
-        elif self.match(TokenType.SUPER):
+        elif self.match(tokType.SUPER):
             keyword=self.previous()
-            self.consume(TokenType.DOT,"Expect '.' after 'super'")
-            method=self.consume(TokenType.IDENTIFIER,"Expect superclass method name")
+            self.consume(tokType.DOT,"Expect '.' after 'super'")
+            method=self.consume(tokType.IDENTIFIER,"Expect superclass method name")
             return Super(keyword,method)
-        elif self.match(TokenType.THIS):
+        elif self.match(tokType.THIS):
             return This(self.previous())
-        elif self.match(TokenType.IDENTIFIER):
+        elif self.match(tokType.IDENTIFIER):
             return Variable(self.previous())
-        elif self.match(TokenType.LEFT_PAREN):
+        elif self.match(tokType.LEFT_PAREN):
             expr=self.expression() 
-            self.consume(TokenType.RIGHT_PAREN,'Expect ) after expression.')
+            self.consume(tokType.RIGHT_PAREN,'Expect ) after expression.')
             return Grouping(expr)
         
         
@@ -182,9 +182,9 @@ class Parser:
     def synchornize(self):
         self.advance() 
         while not self.isAtEnd():
-            if self.previous().type==TokenType.SEMICOLON:
+            if self.previous().type==tokType.SEMICOLON:
                 return
-            typeToStart=[TokenType.CLASS,TokenType.FUN,TokenType.VAR,TokenType.FOR,TokenType.IF,TokenType.WHILE,TokenType.PRINT,TokenType.RETURN]
+            typeToStart=[tokType.CLASS,tokType.FUN,tokType.VAR,tokType.FOR,tokType.IF,tokType.WHILE,tokType.PRINT,tokType.RETURN]
             if self.peek().type in typeToStart:
                 
                 return
@@ -198,27 +198,27 @@ class Parser:
 
     
     def statment(self)->Stmt:
-        if self.match(TokenType.PRINT):
+        if self.match(tokType.PRINT):
             return self.printStatment()
-        if self.match(TokenType.RETURN):
+        if self.match(tokType.RETURN):
             return self.returnStatment()
-        if self.match(TokenType.WHILE):
+        if self.match(tokType.WHILE):
             return self.whileStatment()
-        if self.match(TokenType.LEFT_BRACE):
+        if self.match(tokType.LEFT_BRACE):
             return Block(self.block())
-        if self.match(TokenType.FOR):
+        if self.match(tokType.FOR):
             return self.forStatment()
-        if self.match(TokenType.IF):
+        if self.match(tokType.IF):
             return self.ifStatment()
         return self.expressionStatment()
 
     def declaration(self)->Stmt:
         try:
-            if self.match(TokenType.FUN):
+            if self.match(tokType.FUN):
                 return self.function("function")
-            elif self.match(TokenType.CLASS):
+            elif self.match(tokType.CLASS):
                 return self.classDeclaration()
-            elif self.match(TokenType.VAR):
+            elif self.match(tokType.VAR):
                 return self.varDeclaration()
             else:
                 return self.statment()
@@ -227,65 +227,65 @@ class Parser:
 
     def printStatment(self)->Stmt:
         value=self.expression()
-        self.consume(TokenType.SEMICOLON,"Expect ';' after value")
+        self.consume(tokType.SEMICOLON,"Expect ';' after value")
         return Print(value)
         
 
     def expressionStatment(self)->Stmt:
         expr=self.expression()
-        self.consume(TokenType.SEMICOLON,"Expect ';' after value")
+        self.consume(tokType.SEMICOLON,"Expect ';' after value")
         return Expression(expr)
 
     def varDeclaration(self)->Stmt:
-        name=self.consume(TokenType.IDENTIFIER,"Expect variable name")
+        name=self.consume(tokType.IDENTIFIER,"Expect variable name")
         initializer=None
-        if self.match(TokenType.EQUAL):
+        if self.match(tokType.EQUAL):
             initializer=self.expression() 
-        self.consume(TokenType.SEMICOLON,"Expect ';' after variable declatation")
+        self.consume(tokType.SEMICOLON,"Expect ';' after variable declatation")
         return Var(name,initializer)
 
     def block(self)->list:
         statments=[]
-        while not self.isAtEnd() and not self.check(TokenType.RIGHT_BRACE):
+        while not self.isAtEnd() and not self.check(tokType.RIGHT_BRACE):
             statments.append(self.declaration())
-        self.consume(TokenType.RIGHT_BRACE,"Expect '}' after block.")
+        self.consume(tokType.RIGHT_BRACE,"Expect '}' after block.")
         return statments
 
     def ifStatment(self)->Stmt:
-        self.consume(TokenType.LEFT_PAREN,"Expect '(' after 'if'.")
+        self.consume(tokType.LEFT_PAREN,"Expect '(' after 'if'.")
         condition=self.expression()
-        self.consume(TokenType.RIGHT_PAREN,"Expect ')' after if condition")
+        self.consume(tokType.RIGHT_PAREN,"Expect ')' after if condition")
         thenBranch=self.statment()
         elseBranch=None
-        if self.match(TokenType.ELSE):
+        if self.match(tokType.ELSE):
             elseBranch=self.statment()
         return If(condition,thenBranch,elseBranch)
 
     def whileStatment(self)->Stmt:
-        self.consume(TokenType.LEFT_PAREN,"Expect '(' after 'while'.")
+        self.consume(tokType.LEFT_PAREN,"Expect '(' after 'while'.")
         condition=self.expression()
-        self.consume(TokenType.RIGHT_PAREN,"Expect ')' after while condition")
+        self.consume(tokType.RIGHT_PAREN,"Expect ')' after while condition")
         body=self.statment()
         return While(condition,body)
 
     def forStatment(self)->Stmt:
-        self.consume(TokenType.LEFT_PAREN,"Expect '(' after 'for'.")
+        self.consume(tokType.LEFT_PAREN,"Expect '(' after 'for'.")
         initializer=None
         condition=None
         increment=None
-        if self.match(TokenType.SEMICOLON): 
+        if self.match(tokType.SEMICOLON): 
             initializer=None
-        elif self.match(TokenType.VAR):
+        elif self.match(tokType.VAR):
             initializer=self.varDeclaration()
         else:
             initializer=self.expressionStatment()
-        if not self.check(TokenType.SEMICOLON):
+        if not self.check(tokType.SEMICOLON):
             condition=self.expression()
-        self.consume(TokenType.SEMICOLON,"Expect ; after loop condition")
+        self.consume(tokType.SEMICOLON,"Expect ; after loop condition")
         
-        if not self.check(TokenType.RIGHT_PAREN):
+        if not self.check(tokType.RIGHT_PAREN):
             increment=self.expression()
-        self.consume(TokenType.RIGHT_PAREN,"Expect ) after for clauses")
+        self.consume(tokType.RIGHT_PAREN,"Expect ) after for clauses")
         
         body=self.statment()
         if increment is not None :
@@ -299,38 +299,38 @@ class Parser:
 
     
     def function(self,kind:str)->Stmt:
-        name=self.consume(TokenType.IDENTIFIER,"Expect {} name".format(kind))
-        self.consume(TokenType.LEFT_PAREN,"Expect '(' after {} name".format(kind))
+        name=self.consume(tokType.IDENTIFIER,"Expect {} name".format(kind))
+        self.consume(tokType.LEFT_PAREN,"Expect '(' after {} name".format(kind))
         parameters=[]
-        if not self.check(TokenType.RIGHT_PAREN):
+        if not self.check(tokType.RIGHT_PAREN):
             while True:
                 if len(parameters)>=255:
                     self.error(self.peek(),"Can not have too many params")
-                parameters.append(self.consume(TokenType.IDENTIFIER,"Expect patameter name"))
-                if not self.match(TokenType.COMMA):
+                parameters.append(self.consume(tokType.IDENTIFIER,"Expect patameter name"))
+                if not self.match(tokType.COMMA):
                     break
-        self.consume(TokenType.RIGHT_PAREN,"Expect ')' after params.")
-        self.consume(TokenType.LEFT_BRACE,"Expect fun blocks")
+        self.consume(tokType.RIGHT_PAREN,"Expect ')' after params.")
+        self.consume(tokType.LEFT_BRACE,"Expect fun blocks")
         body=self.block()
         return Function(name,parameters,body)
 
     def returnStatment(self)->Stmt:
         keyword=self.previous()
         value=None
-        if not self.check(TokenType.SEMICOLON):
+        if not self.check(tokType.SEMICOLON):
             value=self.expression()
-        self.consume(TokenType.SEMICOLON,"Expect ';' after rtn value")
+        self.consume(tokType.SEMICOLON,"Expect ';' after rtn value")
         return Return(keyword,value)
 
     def classDeclaration(self)->Stmt:
-        name=self.consume(TokenType.IDENTIFIER,"Expect Class Name")
+        name=self.consume(tokType.IDENTIFIER,"Expect Class Name")
         superclass=None
-        if self.match(TokenType.LESS):
-            self.consume(TokenType.IDENTIFIER,"Expect Super name")
+        if self.match(tokType.LESS):
+            self.consume(tokType.IDENTIFIER,"Expect Super name")
             superclass=Variable(self.previous())
-        self.consume(TokenType.LEFT_BRACE,"Expect { before class body")
+        self.consume(tokType.LEFT_BRACE,"Expect { before class body")
         methods=[]
-        while not self.check(TokenType.RIGHT_BRACE) and not self.isAtEnd():
+        while not self.check(tokType.RIGHT_BRACE) and not self.isAtEnd():
             methods.append(self.function("method"))
-        self.consume(TokenType.RIGHT_BRACE,"Expect } after class body")
+        self.consume(tokType.RIGHT_BRACE,"Expect } after class body")
         return Class(name,superclass,methods)

@@ -1,6 +1,6 @@
 from fLoxAst import *
 from fLoxToken import Token
-from fLoxTokenTypes import TokenType
+from fLoxTokenTypes import tokType
 import fLox
 
 class environment:

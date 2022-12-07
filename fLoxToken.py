@@ -1,7 +1,7 @@
-from fLoxTokenTypes import TokenType
+from fLoxTokenTypes import tokType
 
 class Token(object):
-    def __init__(self,type:TokenType,lexeme:str,literal,line:int):
+    def __init__(self,type:tokType,lexeme:str,literal,line:int):
         self.type=type
         self.lexeme=lexeme
         self.literal=literal
