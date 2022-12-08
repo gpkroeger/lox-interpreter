@@ -14,7 +14,7 @@ class lox(object):
         self.data = None
         self.interpreter = Interpreter()
 
-    def runFile(self,filepath:str):
+    def runFile(self,filepath):
         with open(filepath, 'r') as file:
             self.data = file.read()
         self.run(self.data)
