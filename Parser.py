@@ -180,7 +180,6 @@ class Parser:
                 return
             typeToStart=[tokType.CLASS,tokType.FUN,tokType.VAR,tokType.FOR,tokType.IF,tokType.WHILE,tokType.PRINT,tokType.RETURN]
             if self.peek().type in typeToStart:
-                
                 return
             self.advance()
 
