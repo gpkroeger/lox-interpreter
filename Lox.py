@@ -41,23 +41,23 @@ class lox(object):
         self.interpreter.interpret(statments)
        
     @staticmethod
-    def error(line,message):
-        lox.report(line,"",message)
+    def error(line,msg):
+        lox.report(line,"",msg)
 
     @staticmethod
-    def tokenError(token,message):
+    def tokenError(token,msg):
         if token.type==tokType.EOF:
-            lox.report(token.line,"at end",message)
+            lox.report(token.line,"at end",msg)
         else:
-            lox.report(token.line,"at '"+token.lexeme+"'",message)
+            lox.report(token.line,"at '"+token.lexeme+"'",msg)
 
     @staticmethod
-    def runtimeError(error:RunTimeError):
+    def runtimeError(error):
         lox.hadError=True
         print(error.message+" [line"+str(error.token.line)+"]")
 
     @staticmethod
-    def report(line,where,message):
-        print("line {} error, {}:{}".format(line,where,message))
+    def report(line,where,msg):
+        print("line {} error, {}:{}".format(line,where,msg))
         lox.hadError=True
 
