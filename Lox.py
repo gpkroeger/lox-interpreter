@@ -8,7 +8,9 @@ from interpreter import Interpreter
 
 
 class lox(object):
+
     hasErrorOccured = False
+
     def __init__(self):
         super().__init__()
         self.data = None
@@ -28,8 +30,7 @@ class lox(object):
             self.run(line)
             lox.hasErrorOccured=False
              
-
-    def run(self,source):
+    def run(self, source):
         scanner=Scanner(source)
         tokens=scanner.scanTokens()
         parser=Parser(tokens)
@@ -41,11 +42,11 @@ class lox(object):
         self.interpreter.interpret(statments)
        
     @staticmethod
-    def error(line,msg):
+    def error(line, msg):
         lox.report(line,"",msg)
 
     @staticmethod
-    def tokenError(token,msg):
+    def tokenError(token, msg):
         if token.type==tokType.EOF:
             lox.report(token.line,"at end",msg)
         else:
@@ -57,7 +58,7 @@ class lox(object):
         print(error.message+" [line"+str(error.token.line)+"]")
 
     @staticmethod
-    def report(line,where,msg):
+    def report(line, where, msg):
         print("line {} error, {}:{}".format(line,where,msg))
         lox.hadError=True
 
