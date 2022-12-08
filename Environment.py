@@ -37,4 +37,4 @@ class environment:
         if self.enclosing is not None:
             self.enclosing.assign(name,value)
             return
-        raise RunTimeError(name,"Undefined variable '"+name.lexeme+"'.")
+        raise RunTimeError(name,"Undefined variable '" + name.lexeme + "'.")
