@@ -20,7 +20,7 @@ class lox(object):
             self.data = file.read()
         self.run(self.data)
         if lox.hasErrorOccured:
-            exit()
+            exit(-1)
     
     def runPrompt(self):
         while True:
