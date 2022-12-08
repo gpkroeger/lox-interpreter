@@ -20,6 +20,4 @@ This will open our GUI, here you can mess around with our provided test programs
 Our References for our Project:
 <ul>
 <li>Crafting Interpreters Book: https://craftinginterpreters.com/contents.html
-
-<li>Bob Nystrom's Lox Implementation in Java: https://github.com/munificent/craftinginterpreters/tree/master/java/com/craftinginterpreters/lox
 </ul>
