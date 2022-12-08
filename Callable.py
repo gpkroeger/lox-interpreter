@@ -25,7 +25,6 @@ class ClockCallable(LoxCallable):
 
 class LoxFunction(LoxCallable):
     def __init__(self, declaration, closure, isInitializer):
-        super().__init__()
         self.declaration=declaration 
         self.closure=closure 
         self.isInit=isInitializer
