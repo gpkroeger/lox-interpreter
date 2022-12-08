@@ -18,5 +18,8 @@ or
 This will open our GUI, here you can mess around with our provided test programs in the tests directory, or run your own LOX programs.
 
 Our References for our Project:
-Crafting Interpreters Book: https://craftinginterpreters.com/contents.html
-Bob Nystrom's Lox Implementation in Java: https://github.com/munificent/craftinginterpreters/tree/master/java/com/craftinginterpreters/lox
+<ul>
+<li>Crafting Interpreters Book: https://craftinginterpreters.com/contents.html
+
+<li>Bob Nystrom's Lox Implementation in Java: https://github.com/munificent/craftinginterpreters/tree/master/java/com/craftinginterpreters/lox
+</ul>
