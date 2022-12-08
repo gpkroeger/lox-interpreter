@@ -1,6 +1,7 @@
 from Ast import *
 from Class import *
 from Callable import *
+from Function import *
 import Lox
 import Environment
 
