@@ -257,7 +257,7 @@ class Interpreter(Visitor,StmtVisitor):
             for statment in statments:
                 self.execute(statment)
         except RunTimeError as e:
-            Lox.floxx.runtimeError(e)
+            Lox.lox.runtimeError(e)
 
     def execute(self, stmt:Stmt):
         stmt.accept(self) 

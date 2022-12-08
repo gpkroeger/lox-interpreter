@@ -95,7 +95,7 @@ class Scanner(object):
             elif self.isAlpha(c):
                 self.identifier()
             else:
-                Lox.floxx.error(self.line,"Unexpected Character")
+                Lox.lox.error(self.line,"Unexpected Character")
                 
    
     def match(self,expected:str)->bool:
@@ -133,7 +133,7 @@ class Scanner(object):
             self.advance()
         
         if self.isAtEnd():
-             Lox.floxx.error(self.line,"Unterminated string.")
+             Lox.lox.error(self.line,"Unterminated string.")
              return
         self.advance()
         value=self.source[self.start+1:self.current-1] 

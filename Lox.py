@@ -7,7 +7,7 @@ from Resolver import Resolver
 from interpreter import Interpreter
 
 
-class floxx(object):
+class lox(object):
     ErrorOccured = False
     def __init__(self):
         super().__init__()
@@ -18,7 +18,7 @@ class floxx(object):
         with open(filepath, 'r') as file:
             self.data = file.read()
         self.run(self.data)
-        if floxx.ErrorOccured:
+        if lox.ErrorOccured:
             exit(65)
     
     def runPrompt(self):
@@ -26,7 +26,7 @@ class floxx(object):
             print(">", end='')
             line=input()
             self.run(line)
-            floxx.ErrorOccured=False
+            lox.ErrorOccured=False
              
 
     def run(self,source:str):
@@ -35,29 +35,29 @@ class floxx(object):
         parser=Parser(tokens)
         statments=parser.parse()
         resolver=Resolver(self.interpreter)
-        if floxx.ErrorOccured:
+        if lox.ErrorOccured:
             return;
         resolver.resolve(statments)
         self.interpreter.interpret(statments)
        
     @staticmethod
     def error(line:int,message:str):
-        floxx.report(line,"",message)
+        lox.report(line,"",message)
 
     @staticmethod
     def tokenError(token:Token,message:str):
         if token.type==tokType.EOF:
-            floxx.report(token.line,"at end",message)
+            lox.report(token.line,"at end",message)
         else:
-            floxx.report(token.line,"at '"+token.lexeme+"'",message)
+            lox.report(token.line,"at '"+token.lexeme+"'",message)
 
     @staticmethod
     def runtimeError(error:RunTimeError):
-        floxx.hadError=True
+        lox.hadError=True
         print(error.message+" [line"+str(error.token.line)+"]")
 
     @staticmethod
     def report(line:int,where:str,message:str):
         print("line {} error, {}:{}".format(line,where,message))
-        floxx.hadError=True
+        lox.hadError=True
 
