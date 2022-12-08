@@ -8,7 +8,6 @@ import Environment
 class Interpreter(Visitor,StmtVisitor):
     globalEnv=Environment.environment(None)
     def __init__(self):
-        super().__init__()
         self.environment=self.globalEnv
         self.locals=dict()
         self.globalEnv.define("clock",ClockCallable())
