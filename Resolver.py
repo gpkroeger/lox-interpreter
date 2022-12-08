@@ -4,8 +4,7 @@ from collections import deque
 import Lox
 
 class Resolver(Visitor,StmtVisitor):
-    def __init__(self,interpreter):
-        super().__init__()
+    def __init__(self, interpreter):
         self.interpreter=interpreter
         self.scopes=deque() 
         self.currentFunction=FunctionType.NONE
@@ -17,7 +16,6 @@ class Resolver(Visitor,StmtVisitor):
         self.endScope()
         return None
 
-    
     def visitVarStmt(self,stmt:Var):
         self.declare(stmt.name)
         if stmt.initializer is not None:

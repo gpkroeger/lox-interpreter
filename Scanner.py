@@ -22,8 +22,7 @@ keywords={
 }
 
 class Scanner(object):
-    def __init__(self, source:str):
-        super().__init__()
+    def __init__(self, source):
         self.source=source
         self.tokens=list()
         self.start=0
@@ -52,7 +51,6 @@ class Scanner(object):
             self.addToken(tokType.SEMICOLON)
         elif c=='*':
             self.addToken(tokType.STAR)
-        
         elif c=="!":
             if self.match('='):
                 self.addToken(tokType.BANG_EQUAL)
@@ -84,11 +82,8 @@ class Scanner(object):
         elif c=='\n':
             self.line+=1
             pass
-        
-        
         elif c=='"':
             self.string() 
-        
         else:
             if self.isDigit(c):
                 self.number()
@@ -97,8 +92,7 @@ class Scanner(object):
             else:
                 Lox.lox.error(self.line,"Unexpected Character")
                 
-   
-    def match(self,expected:str)->bool:
+    def match(self, expected):
         if self.isAtEnd():
             return False
         if self.source[self.current]!=expected:
@@ -106,22 +100,22 @@ class Scanner(object):
         self.current+=1
         return True
 
-    def isAtEnd(self)->bool:
+    def isAtEnd(self):
         return self.current>=len(self.source)
 
-    def advance(self)->str:
+    def advance(self):
         self.current+=1
         return self.source[self.current-1]
 
     
-    def peek(self)->str:
+    def peek(self):
         if self.isAtEnd():
             return '\0'
         else:
             return self.source[self.current]
 
 
-    def peekNext(self)->str:
+    def peekNext(self):
         if self.current+1>=len(self.source):
             return '\0'
         return self.source[self.current+1]
@@ -131,7 +125,6 @@ class Scanner(object):
             if self.peek()=='\n':
                 self.line+=1
             self.advance()
-        
         if self.isAtEnd():
              Lox.lox.error(self.line,"Unterminated string.")
              return
@@ -139,14 +132,14 @@ class Scanner(object):
         value=self.source[self.start+1:self.current-1] 
         self.addToken(tokType.STRING,value)
 
-    def isDigit(self,c:str)->bool:
-        return c>='0' and c<='9'
+    def isDigit(self, char):
+        return char>='0' and char<='9'
 
-    def isAlpha(self,c:str)->bool:
-        return (c>='a' and c<='z') or (c>='A' and c<='Z') or c=='_'
+    def isAlpha(self,char):
+        return (char>='a' and char<='z') or (char>='A' and char<='Z') or char=='_'
 
-    def isAlphaNumeric(self,c:str)->bool:
-        return self.isAlpha(c) or self.isDigit(c)
+    def isAlphaNumeric(self,char):
+        return self.isAlpha(char) or self.isDigit(char)
 
     def number(self):
         while self.isDigit(self.peek()):
@@ -157,7 +150,6 @@ class Scanner(object):
                 self.advance()
         self.addToken(tokType.NUMBER,float(self.source[self.start:self.current]))
     
-
     def identifier(self):
         while self.isAlphaNumeric(self.peek()):
             self.advance()
@@ -167,15 +159,13 @@ class Scanner(object):
             type=tokType.IDENTIFIER
         self.addToken(type)
 
-    def scanTokens(self)->list:
+    def scanTokens(self):
         while not self.isAtEnd():
             self.start = self.current
             self.scanToken()
         self.tokens.append(Token(tokType.EOF,"",None,self.line))
         return self.tokens
 
-    
-    def addToken(self,type:tokType,literal=None):
+    def addToken(self, type, literal=None):
         text=self.source[self.start:self.current]
         self.tokens.append(Token(type,text,literal,self.line))
-
