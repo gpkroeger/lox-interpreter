@@ -61,4 +61,3 @@ class lox(object):
     def report(line, where, msg):
         print("line {} error, {}:{}".format(line,where,msg))
         lox.hadError=True
-

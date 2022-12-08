@@ -18,8 +18,3 @@ class ClockCallable(LoxCallable):
 
     def call(self, interpreter, arguments):
         return float(time.time()) 
-
-
-
-
-        

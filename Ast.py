@@ -291,4 +291,3 @@ class Class(Stmt):
 
      def accept(self,visitor):
         return visitor.visitClassStmt(self)
-

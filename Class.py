@@ -55,8 +55,3 @@ class FLOXInstance:
 
     def set(self,name,value):
         self.fields[name.lexeme]=value
-
-
-
-
-
