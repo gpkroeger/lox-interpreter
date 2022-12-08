@@ -1,0 +1,14 @@
+var a = 5;
+var b = 5;
+var c = 1;
+
+print a < b;    //False
+print a > b;    //False
+
+print a >= b;   //True
+print b >= c;   //True
+
+print a <= b;   //True
+print b <= c;   //False
+
+print -(a); //Negation

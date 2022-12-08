@@ -95,7 +95,7 @@ class Scanner(object):
             elif self.isAlpha(c):
                 self.identifier()
             else:
-                fLox.floxx.error(self.line,"Unexpecterd Character.")
+                fLox.floxx.error(self.line,"Unexpected Character")
                 
    
     def match(self,expected:str)->bool:

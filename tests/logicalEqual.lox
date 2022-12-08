@@ -1,0 +1,5 @@
+var a = 5;
+var b = 5;
+var c = 1;
+print a == b;   //True
+print b == c;   //False
