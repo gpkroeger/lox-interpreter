@@ -12,14 +12,16 @@ class LoxCallable(ABC):
         pass
 
 class ClockCallable(LoxCallable):
-    def call(self, interpreter, arguments):
-        return float(time.time()) 
+
+    def __str__(self)->str:
+        return "<native fn>"
 
     def arity(self):
         return 0
 
-    def __str__(self)->str:
-        return "<native fn>"
+    def call(self, interpreter, arguments):
+        return float(time.time()) 
+
 
 class LoxFunction(LoxCallable):
     def __init__(self, declaration, closure, isInitializer):
