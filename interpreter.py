@@ -65,12 +65,10 @@ class Interpreter(Visitor,StmtVisitor):
             return not self.isTruthy(rightVal)
         return None
 
-    
     def visitVariableExpr(self, expr:Variable):
         
         return self.lookUpVariable(expr.name,expr) 
 
-    
     def visitAssignExpr(self,expr:Assign):
         value=self.evaluate(expr.value)
         distance=self.locals.get(expr)
@@ -128,9 +126,6 @@ class Interpreter(Visitor,StmtVisitor):
             raise RunTimeError(expr.method,"Undefined propety {} in super".format(expr.method.lexeme))
         return method.bind(obj)
             
-    
-
-
     def visitExpressionStmt(self, stmt:Expression):
         self.evaluate(stmt.expression)
         return None 
@@ -233,25 +228,25 @@ class Interpreter(Visitor,StmtVisitor):
         if statusOk is False:
             raise RunTimeError(operator,"Operand must be a number")
 
-    def stringify(self,obj)->str:
+    def stringify(self,obj):
         if obj is None:
             return "nil"
+
         if type(obj) is float:
             text=str(obj)
             if text.endswith(".0"):
                 text=text[0:len(text)-2]
             return text
+
         return str(obj)
 
-    def lookUpVariable(self,name:Token,expr:Expr):
+    def lookUpVariable(self, name, expr):
         distance=self.locals.get(expr)
         if distance is not None:
             return self.environment.getAt(distance,name.lexeme)
         else:
             return self.globalEnv.get(name)
 
-
-    
     def interpret(self,statments:list):
         try:
             for statment in statments:

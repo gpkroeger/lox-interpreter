@@ -42,7 +42,7 @@ class FLOXInstance:
         self.fields = {}
 
     def __str__(self):
-        return self.klass.name + " instance"  #Testing
+        return self.klass.className + " instance"  #Testing
 
     def get(self, name):
         if self.fields.get(name.lexeme) is not None:
