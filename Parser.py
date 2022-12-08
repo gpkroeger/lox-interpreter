@@ -171,12 +171,8 @@ class Parser:
             expr=self.expression() 
             self.consume(tokType.RIGHT_PAREN,'Expect ) after expression.')
             return Grouping(expr)
-        
-        
         raise self.error(self.peek(),"Expect expression.")
 
-    
-    
     def synchornize(self):
         self.advance() 
         while not self.isAtEnd():
