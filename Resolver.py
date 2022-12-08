@@ -57,8 +57,7 @@ class Resolver(Visitor,StmtVisitor):
         self.resolve(stmt.condition)
         self.resolve(stmt.body)
         return None
-
-    
+ 
     def visitClassStmt(self, stmt:Class):
         enclosingClass=self.currentClass
         self.currentClass=ClassType.CLASS
@@ -85,7 +84,6 @@ class Resolver(Visitor,StmtVisitor):
         self.currentClass=enclosingClass
         return None
 
-    
     def visitVariableExpr(self, expr:Variable):
         if len(self.scopes)!=0 and self.scopes[-1].get(expr.name.lexeme) is False:
             Lox.lox.error(expr.name,"Cant read local var without initalizer.")
