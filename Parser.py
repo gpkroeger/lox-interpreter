@@ -6,34 +6,34 @@ class Parser:
         self.tokens=tokens
         self.current=0 
 
-    def isAtEnd(self)->bool:
+    def isAtEnd(self):
         return self.peek().type is tokType.EOF
 
-    def peek(self)->Token:
+    def peek(self):
         return self.tokens[self.current]
 
-    def previous(self)->Token:
+    def previous(self):
         return self.tokens[self.current-1]
 
-    def advance(self)->Token:
+    def advance(self):
         if not self.isAtEnd():
             self.current+=1
         return self.previous()
 
-    def check(self,type:tokType)->bool:
+    def check(self,type:tokType):
         if self.isAtEnd():
             return False
         return self.peek().type==type
 
     
-    def match(self, *types)->bool:
+    def match(self, *types):
         for type in types:
             if self.check(type):
                 self.advance()
                 return True 
         return False
 
-    def consume(self,type:tokType, message:str):
+    def consume(self,type, message):
         if self.check(type):
             return self.advance()
         next=self.peek()
@@ -44,29 +44,27 @@ class Parser:
         return ParseError()
 
     
-    def expression(self)->Expr:
+    def expression(self):
         return self.assignment()
 
-    def assignment(self)->Expr:
+    def assignment(self):
         expr=self.logic_OR()
 
         if self.match(tokType.EQUAL):
             equals=self.previous()
             value=self.assignment()
-
             if type(expr) is Variable:
                 name=expr.name
-
                 return Assign(name,value)
 
             elif isinstance(expr,Get):
-
                 return Set(expr.obj,expr.name,value)
+
             else:
                 self.error(equals,"Invalid assignment target.")
         return expr
 
-    def logic_OR(self)->Expr:
+    def logic_OR(self):
         expr=self.logic_AND()
         while self.match(tokType.OR):
             operator=self.previous()
@@ -75,7 +73,7 @@ class Parser:
         return expr
 
     
-    def logic_AND(self)->Expr:
+    def logic_AND(self):
         expr=self.equality()
         while self.match(tokType.AND):
             operator=self.previous()
@@ -84,7 +82,7 @@ class Parser:
         return expr
 
 
-    def equality(self)->Expr:
+    def equality(self):
         
         expr=self.comparison()
         while self.match(tokType.BANG_EQUAL,tokType.EQUAL_EQUAL):
@@ -93,7 +91,7 @@ class Parser:
             expr=Binary(expr,operator,right)
         return expr
 
-    def comparison(self)->Expr:
+    def comparison(self):
         expr=self.term()
         while self.match(tokType.GREATER,tokType.GREATER_EQUAL,tokType.LESS,tokType.LESS_EQUAL):
             operator=self.previous()
@@ -101,7 +99,7 @@ class Parser:
             expr=Binary(expr,operator,right)
         return expr
 
-    def term(self)->Expr:
+    def term(self):
         expr=self.factor()
         while self.match(tokType.MINUS,tokType.PLUS):
             operator=self.previous()
@@ -109,7 +107,7 @@ class Parser:
             expr=Binary(expr,operator,right)
         return expr
 
-    def factor(self)->Expr:
+    def factor(self):
         expr=self.unary()
         while self.match(tokType.SLASH,tokType.STAR):
             operator=self.previous()
@@ -117,7 +115,7 @@ class Parser:
             expr=Binary(expr,operator,right)
         return expr 
 
-    def unary(self)->Expr:
+    def unary(self):
         if self.match(tokType.BANG,tokType.MINUS):
             operator=self.previous()
             right=self.unary()
@@ -125,7 +123,7 @@ class Parser:
         else:
             return self.call()
 
-    def call(self)->Expr:
+    def call(self):
         expr=self.primary()
         while True:
             if self.match(tokType.LEFT_PAREN):
@@ -137,7 +135,7 @@ class Parser:
                 break
         return expr
 
-    def finishCall(self,callee:Expr)->Expr:
+    def finishCall(self,callee):
         arguments=[]
         if not self.check(tokType.RIGHT_PAREN):
             while True:
@@ -151,7 +149,7 @@ class Parser:
 
     
 
-    def primary(self)->Expr:
+    def primary(self):
         if self.match(tokType.FALSE):
             return Literal(False)
         elif self.match(tokType.TRUE):
@@ -197,7 +195,7 @@ class Parser:
         return statments
 
     
-    def statment(self)->Stmt:
+    def statment(self):
         if self.match(tokType.PRINT):
             return self.printStatment()
         if self.match(tokType.RETURN):
@@ -212,7 +210,7 @@ class Parser:
             return self.ifStatment()
         return self.expressionStatment()
 
-    def declaration(self)->Stmt:
+    def declaration(self):
         try:
             if self.match(tokType.FUN):
                 return self.function("function")
@@ -225,18 +223,18 @@ class Parser:
         except ParseError as e:
             self.synchornize()
 
-    def printStatment(self)->Stmt:
+    def printStatment(self):
         value=self.expression()
         self.consume(tokType.SEMICOLON,"Expect ';' after value")
         return Print(value)
         
 
-    def expressionStatment(self)->Stmt:
+    def expressionStatment(self):
         expr=self.expression()
         self.consume(tokType.SEMICOLON,"Expect ';' after value")
         return Expression(expr)
 
-    def varDeclaration(self)->Stmt:
+    def varDeclaration(self):
         name=self.consume(tokType.IDENTIFIER,"Expect variable name")
         initializer=None
         if self.match(tokType.EQUAL):
@@ -244,14 +242,14 @@ class Parser:
         self.consume(tokType.SEMICOLON,"Expect ';' after variable declatation")
         return Var(name,initializer)
 
-    def block(self)->list:
+    def block(self):
         statments=[]
         while not self.isAtEnd() and not self.check(tokType.RIGHT_BRACE):
             statments.append(self.declaration())
         self.consume(tokType.RIGHT_BRACE,"Expect '}' after block.")
         return statments
 
-    def ifStatment(self)->Stmt:
+    def ifStatment(self):
         self.consume(tokType.LEFT_PAREN,"Expect '(' after 'if'.")
         condition=self.expression()
         self.consume(tokType.RIGHT_PAREN,"Expect ')' after if condition")
@@ -261,14 +259,14 @@ class Parser:
             elseBranch=self.statment()
         return If(condition,thenBranch,elseBranch)
 
-    def whileStatment(self)->Stmt:
+    def whileStatment(self):
         self.consume(tokType.LEFT_PAREN,"Expect '(' after 'while'.")
         condition=self.expression()
         self.consume(tokType.RIGHT_PAREN,"Expect ')' after while condition")
         body=self.statment()
         return While(condition,body)
 
-    def forStatment(self)->Stmt:
+    def forStatment(self):
         self.consume(tokType.LEFT_PAREN,"Expect '(' after 'for'.")
         initializer=None
         condition=None
@@ -298,7 +296,7 @@ class Parser:
         return body 
 
     
-    def function(self,kind:str)->Stmt:
+    def function(self,kind):
         name=self.consume(tokType.IDENTIFIER,"Expect {} name".format(kind))
         self.consume(tokType.LEFT_PAREN,"Expect '(' after {} name".format(kind))
         parameters=[]
@@ -314,7 +312,7 @@ class Parser:
         body=self.block()
         return Function(name,parameters,body)
 
-    def returnStatment(self)->Stmt:
+    def returnStatment(self):
         keyword=self.previous()
         value=None
         if not self.check(tokType.SEMICOLON):
@@ -322,7 +320,7 @@ class Parser:
         self.consume(tokType.SEMICOLON,"Expect ';' after rtn value")
         return Return(keyword,value)
 
-    def classDeclaration(self)->Stmt:
+    def classDeclaration(self):
         name=self.consume(tokType.IDENTIFIER,"Expect Class Name")
         superclass=None
         if self.match(tokType.LESS):
