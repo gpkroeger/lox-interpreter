@@ -8,9 +8,6 @@ class environment:
         self.values={}
         self.enclosing=enclosing 
 
-    def define(self, name, value):
-        self.values[name]=value
-
     def get(self, name):
         if self.values.get(name.lexeme,"Not Registered") != "Not Registered":
             return self.values.get(name.lexeme)
@@ -18,14 +15,17 @@ class environment:
             return self.enclosing.get(name)
         raise RunTimeError(name,"Undefined variable '"+name.lexeme+"'.")
 
-    def getAt(self, distance, name):
-        return self.ancestor(distance).values.get(name)
+    def define(self, name, value):
+        self.values[name]=value
 
     def ancestor(self, distance):
         env=self
         for i in range(distance):
             env=env.enclosing
         return env
+
+    def getAt(self, distance, name):
+        return self.ancestor(distance).values.get(name)
             
     def assignAt(self, distance, name, value):
         self.ancestor(distance).values[name.lexeme]=value
