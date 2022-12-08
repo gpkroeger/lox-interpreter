@@ -2,7 +2,7 @@ import Callable
 from Ast import *
 
 class FLOXclass(Callable.LoxCallable):
-    def __init__(self, name:str,superclass,methods):
+    def __init__(self, name , superclass, methods):
         self.name=name
         self.methods=methods
         self.superclass=superclass
@@ -10,11 +10,12 @@ class FLOXclass(Callable.LoxCallable):
     def __str__(self):
         return self.name 
 
-    def call(self,interpreter,arguments):
+    def call(self, interpreter, arguments):
         instance=FLOXInstance(self)
         initializer=self.findMethod('init')
-        if initializer is not None:
-            initializer.bind(instance).call(interpreter,arguments)
+
+        if initializer is not None: 
+            initializer.bind(instance).call(interpreter,arguments) #init
         return instance
 
     def findMethod(self,name):
@@ -28,21 +29,22 @@ class FLOXclass(Callable.LoxCallable):
 
     def arity(self):
         initializer=self.findMethod('init')
+
         if initializer is None:
             return 0
         else:
-            return initializer.arity()
+            return initializer.arity() #init
 
 
 class FLOXInstance:
-    def __init__(self, klass:FLOXclass):
-        self.klass=klass
-        self.fields={}
+    def __init__(self, klass):
+        self.klass = klass
+        self.fields = {}
 
     def __str__(self):
-        return self.klass.name+" instance"
+        return self.klass.name + " instance"  #Testing
 
-    def get(self,name:Token):
+    def get(self, name):
         if self.fields.get(name.lexeme) is not None:
             return self.fields[name.lexeme]
         method=self.klass.findMethod(name.lexeme)
