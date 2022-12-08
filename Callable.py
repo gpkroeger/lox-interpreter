@@ -37,6 +37,7 @@ class LoxFunction(LoxCallable):
 
     def call(self, interpreter, arguments):
         env=Environment.environment(self.closure)
+        
         for i in range(len(self.declaration.params)):
             env.define(self.declaration.params[i].lexeme,arguments[i])
         
