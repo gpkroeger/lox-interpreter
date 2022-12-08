@@ -1,6 +1,6 @@
-import fLoxInterpreter
+import interpreter
 import time
-from fLoxAst import *
+from Ast import *
 import Environment
 
 

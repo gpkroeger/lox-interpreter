@@ -1,6 +1,6 @@
-from fLoxToken import Token
-from fLoxTokenTypes import tokType
-import fLox
+from Token import Token
+from TokenTypes import tokType
+import Lox
 
 keywords={
     'and':tokType.AND,
@@ -95,7 +95,7 @@ class Scanner(object):
             elif self.isAlpha(c):
                 self.identifier()
             else:
-                fLox.floxx.error(self.line,"Unexpected Character")
+                Lox.floxx.error(self.line,"Unexpected Character")
                 
    
     def match(self,expected:str)->bool:
@@ -133,7 +133,7 @@ class Scanner(object):
             self.advance()
         
         if self.isAtEnd():
-             fLox.floxx.error(self.line,"Unterminated string.")
+             Lox.floxx.error(self.line,"Unterminated string.")
              return
         self.advance()
         value=self.source[self.start+1:self.current-1] 

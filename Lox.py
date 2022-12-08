@@ -1,10 +1,10 @@
-from fLoxScanner import Scanner
-from fLoxToken import Token
-from fLoxTokenTypes import tokType
-from fLoxAst import *
-from fLoxParser import Parser
-from fLoxResolver import Resolver
-from fLoxInterpreter import Interpreter
+from Scanner import Scanner
+from Token import Token
+from TokenTypes import tokType
+from Ast import *
+from Parser import Parser
+from Resolver import Resolver
+from interpreter import Interpreter
 
 
 class floxx(object):

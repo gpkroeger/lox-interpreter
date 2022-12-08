@@ -1,4 +1,4 @@
-from fLoxTokenTypes import tokType
+from TokenTypes import tokType
 
 class Token(object):
     def __init__(self,type:tokType,lexeme:str,literal,line:int):

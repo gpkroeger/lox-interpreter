@@ -1,5 +1,5 @@
-from fLoxAst import *
-import fLox
+from Ast import *
+import Lox
 
 class Parser:
     def __init__(self, tokens, *args, **kwargs):
@@ -40,7 +40,7 @@ class Parser:
         raise self.error(next,message)
 
     def error(self,token,message):
-        fLox.floxx.tokenError(token,message)
+        Lox.floxx.tokenError(token,message)
         return ParseError()
 
     

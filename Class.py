@@ -1,7 +1,7 @@
-import fLoxCall
-from fLoxAst import *
+import Callable
+from Ast import *
 
-class FLOXclass(fLoxCall.LoxCallable):
+class FLOXclass(Callable.LoxCallable):
     def __init__(self, name:str,superclass,methods):
         self.name=name
         self.methods=methods
@@ -12,20 +12,19 @@ class FLOXclass(fLoxCall.LoxCallable):
 
     def call(self,interpreter,arguments):
         instance=FLOXInstance(self)
-        
         initializer=self.findMethod('init')
         if initializer is not None:
             initializer.bind(instance).call(interpreter,arguments)
         return instance
 
     def findMethod(self,name):
-        m=self.methods.get(name)
-        sm=None
+        methods=self.methods.get(name)
+        supermethods=None
         if self.superclass is not None:
-            sm=self.superclass.findMethod(name)
-        if m!=None:
-            return m
-        return sm
+            supermethods=self.superclass.findMethod(name)
+        if methods!=None:
+            return methods
+        return supermethods
 
     def arity(self):
         initializer=self.findMethod('init')

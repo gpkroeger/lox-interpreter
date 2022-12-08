@@ -1,8 +1,8 @@
 import sys
 from pathlib import Path
-from fLox import floxx
-from fLoxTokenTypes import tokType
-from fLoxToken import Token
+from Lox import floxx
+from TokenTypes import tokType
+from Token import Token
 
 if __name__ == "__main__":
     arguments = sys.argv

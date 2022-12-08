@@ -1,7 +1,7 @@
-from fLoxAst import *
+from Ast import *
 from Class import *
-from fLoxCall import *
-import fLox
+from Callable import *
+import Lox
 import Environment
 
 class Interpreter(Visitor,StmtVisitor):
@@ -257,7 +257,7 @@ class Interpreter(Visitor,StmtVisitor):
             for statment in statments:
                 self.execute(statment)
         except RunTimeError as e:
-            fLox.floxx.runtimeError(e)
+            Lox.floxx.runtimeError(e)
 
     def execute(self, stmt:Stmt):
         stmt.accept(self) 

@@ -1,7 +1,7 @@
-from fLoxAst import *
-from fLoxToken import Token
-from fLoxTokenTypes import tokType
-import fLox
+from Ast import *
+from Token import Token
+from TokenTypes import tokType
+import Lox
 
 class environment:
     def __init__(self,enclosing=None):

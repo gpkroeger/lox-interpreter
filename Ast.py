@@ -1,8 +1,8 @@
 
 from enum import Enum, auto
 from abc import ABC, abstractmethod
-from fLoxTokenTypes import tokType
-from fLoxToken import Token
+from TokenTypes import tokType
+from Token import Token
 
 class FunctionType(Enum):
     NONE= auto()
