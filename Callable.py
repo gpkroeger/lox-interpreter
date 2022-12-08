@@ -5,7 +5,7 @@ import Environment
 
 
 class LoxCallable(ABC):
-    def call(self,interpreter,arguments):
+    def call(self, interpreter, arguments):
         pass
 
     def arity(self):
@@ -22,14 +22,19 @@ class ClockCallable(LoxCallable):
         return "<native fn>"
 
 class LoxFunction(LoxCallable):
-    def __init__(self,declaration:Function,closure,isInitializer):
-        
+    def __init__(self, declaration, closure, isInitializer):
         super().__init__()
         self.declaration=declaration 
         self.closure=closure 
         self.isInit=isInitializer
 
-    def call(self,interpreter,arguments:list):
+    def __str__(self)->str:
+        return "<fn " + self.declaration.name.lexeme + ">"
+
+    def arity(self):
+        return len(self.declaration.params)
+
+    def call(self, interpreter, arguments):
         env=Environment.environment(self.closure)
         for i in range(len(self.declaration.params)):
             env.define(self.declaration.params[i].lexeme,arguments[i])
@@ -39,16 +44,11 @@ class LoxFunction(LoxCallable):
             if self.isInit:
                 return self.closure.getAt(0,"this")
             return None
+
         except ReturnException as e:
             if self.isInit:
                 return self.closure.getAt(0,"this")
             return e.value
-
-    def arity(self):
-        return len(self.declaration.params)
-
-    def __str__(self)->str:
-        return "<fn {}>".format(self.declaration.name.lexeme)
 
     def bind(self,instance):
         env=Environment.environment(self.closure)
