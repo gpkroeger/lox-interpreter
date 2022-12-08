@@ -3,12 +3,12 @@ from Ast import *
 
 class FLOXclass(Callable.LoxCallable):
     def __init__(self, name , superclass, methods):
-        self.name=name
-        self.methods=methods
+        self.className=name
+        self.classMethods=methods
         self.superclass=superclass
 
     def __str__(self):
-        return self.name 
+        return self.className 
 
     def call(self, interpreter, arguments):
         instance=FLOXInstance(self)
@@ -19,7 +19,7 @@ class FLOXclass(Callable.LoxCallable):
         return instance
 
     def findMethod(self,name):
-        methods=self.methods.get(name)
+        methods=self.classMethods.get(name)
         supermethods=None
         if self.superclass is not None:
             supermethods=self.superclass.findMethod(name)
