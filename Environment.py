@@ -4,7 +4,7 @@ from TokenTypes import tokType
 import Lox
 
 class environment:
-    def __init__(self,enclosing=None):
+    def __init__(self, enclosing = None):
         self.values={}
         self.enclosing=enclosing 
 
