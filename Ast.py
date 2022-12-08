@@ -25,7 +25,6 @@ class RunTimeError(Exception):
 
 class ReturnException(Exception):
     def __init__(self,value):
-        super().__init__(value)
         self.value=value
 
 class Expr(ABC):
