@@ -20,7 +20,6 @@ class ParseError(Exception):
 
 class RunTimeError(Exception):
     def __init__(self,token,message):
-        super().__init__()
         self.token=token
         self.message=message
 
