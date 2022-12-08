@@ -8,7 +8,7 @@ from interpreter import Interpreter
 
 
 class lox(object):
-    ErrorOccured = False
+    hasErrorOccured = False
     def __init__(self):
         super().__init__()
         self.data = None
@@ -18,7 +18,7 @@ class lox(object):
         with open(filepath, 'r') as file:
             self.data = file.read()
         self.run(self.data)
-        if lox.ErrorOccured:
+        if lox.hasErrorOccured:
             exit(65)
     
     def runPrompt(self):
@@ -26,7 +26,7 @@ class lox(object):
             print(">", end='')
             line=input()
             self.run(line)
-            lox.ErrorOccured=False
+            lox.hasErrorOccured=False
              
 
     def run(self,source):
@@ -35,7 +35,7 @@ class lox(object):
         parser=Parser(tokens)
         statments=parser.parse()
         resolver=Resolver(self.interpreter)
-        if lox.ErrorOccured:
+        if lox.hasErrorOccured:
             return;
         resolver.resolve(statments)
         self.interpreter.interpret(statments)
