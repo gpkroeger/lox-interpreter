@@ -8,11 +8,10 @@ from interpreter import Interpreter
 
 
 class lox(object):
-
+    #Global Error Flag
     hasErrorOccured = False
 
     def __init__(self):
-        super().__init__()
         self.data = None
         self.interpreter = Interpreter()
 
