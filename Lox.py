@@ -29,7 +29,7 @@ class lox(object):
             lox.ErrorOccured=False
              
 
-    def run(self,source:str):
+    def run(self,source):
         scanner=Scanner(source)
         tokens=scanner.scanTokens()
         parser=Parser(tokens)
@@ -41,11 +41,11 @@ class lox(object):
         self.interpreter.interpret(statments)
        
     @staticmethod
-    def error(line:int,message:str):
+    def error(line,message):
         lox.report(line,"",message)
 
     @staticmethod
-    def tokenError(token:Token,message:str):
+    def tokenError(token,message):
         if token.type==tokType.EOF:
             lox.report(token.line,"at end",message)
         else:
@@ -57,7 +57,7 @@ class lox(object):
         print(error.message+" [line"+str(error.token.line)+"]")
 
     @staticmethod
-    def report(line:int,where:str,message:str):
+    def report(line,where,message):
         print("line {} error, {}:{}".format(line,where,message))
         lox.hadError=True
 
